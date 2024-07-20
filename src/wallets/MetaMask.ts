@@ -37,6 +37,7 @@ class MetaMask implements Wallet {
       if (!this.eip1193Provider) {
         throw new Error("MetaMask SDK provider not found");
       }
+      await this.eip1193Provider.request({ method: "eth_requestAccounts" });
       return new BrowserProvider(this.eip1193Provider);
     }
   }

@@ -2,6 +2,9 @@ import { BrowserProvider } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
 declare class WalletConnect implements Wallet {
+    private web3Modal;
+    private resolveConnection?;
+    private rejectConnection?;
     init(options: {
         name: string;
         icon: string;

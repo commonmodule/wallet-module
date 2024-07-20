@@ -1,7 +1,9 @@
 import { BrowserProvider } from "ethers";
-import Wallet from "./Wallet.js";
 import ChainInfo from "../ChainInfo.js";
+import Wallet from "./Wallet.js";
 declare class CoinbaseWallet implements Wallet {
+    private chains;
+    private eip1193Provider;
     init(options: {
         name: string;
         icon: string;
