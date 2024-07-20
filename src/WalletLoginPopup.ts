@@ -7,15 +7,14 @@ export default class WalletLoginPopup extends Popup {
   constructor() {
     super(".wallet-login-popup", { barrierDismissible: true });
     this.header.append(el("h1", "Login with Crypto Wallet"));
-
     this.main.append(
       el(
         "section",
-        el("h2", "WalletConnect - Recommendation"),
+        el("h2", "WalletConnect - Recommended"),
         new Button({
           type: ButtonType.Contained,
           icon: el("img", { src: "/images/wallet-icons/walletconnect.svg" }),
-          title: "WalletConnect",
+          title: "Login with WalletConnect",
           onClick: () => this.selectWallet("walletconnect"),
         }),
       ),
@@ -24,23 +23,22 @@ export default class WalletLoginPopup extends Popup {
         el("h2", "Direct Login"),
         el(
           "p",
-          "These are options you can try when WalletConnect is not working well. Direct Login requires reconnection every time you start the app, so it may be less convenient compared to WalletConnect.",
+          "These options are available when WalletConnect is not working properly. Direct login requires re-authentication each time you start the app, which may be less convenient compared to WalletConnect.",
         ),
         new Button({
           type: ButtonType.Contained,
           icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
-          title: "MetaMask",
+          title: "Login with MetaMask",
           onClick: () => this.selectWallet("metamask"),
         }),
         new Button({
           type: ButtonType.Contained,
           icon: el("img", { src: "/images/wallet-icons/coinbase-wallet.svg" }),
-          title: "Coinbase Wallet",
+          title: "Login with Coinbase Wallet",
           onClick: () => this.selectWallet("coinbase-wallet"),
         }),
       ),
     );
-
     this.footer.append(
       new Button({
         tag: ".cancel",
@@ -48,7 +46,7 @@ export default class WalletLoginPopup extends Popup {
         onClick: () => this.delete(),
       }),
     );
-    this.on("delete", () => this.reject?.(new Error("Canceled by user")));
+    this.on("delete", () => this.reject?.(new Error("Login canceled by user")));
   }
 
   private selectWallet(walletId: string) {

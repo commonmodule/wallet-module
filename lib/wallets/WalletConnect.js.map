@@ -1,1 +1,1 @@
-{"version":3,"file":"WalletConnect.js","sourceRoot":"","sources":["../../src/wallets/WalletConnect.ts"],"names":[],"mappings":""}
+{"version":3,"file":"WalletConnect.js","sourceRoot":"","sources":["../../src/wallets/WalletConnect.ts"],"names":[],"mappings":"AAKA,MAAM,aAAa;IACV,IAAI,CAAC,OAMX,IAAG,CAAC;IAEE,KAAK,CAAC,OAAO;QAClB,MAAM,IAAI,KAAK,CAAC,yBAAyB,CAAC,CAAC;IAC7C,CAAC;IAEM,KAAK,CAAC,UAAU;QACrB,MAAM,IAAI,KAAK,CAAC,yBAAyB,CAAC,CAAC;IAC7C,CAAC;IAEM,KAAK,CAAC,WAAW,CAAC,OAAe;QACtC,MAAM,IAAI,KAAK,CAAC,yBAAyB,CAAC,CAAC;IAC7C,CAAC;CACF;AAED,eAAe,IAAI,aAAa,EAAE,CAAC"}

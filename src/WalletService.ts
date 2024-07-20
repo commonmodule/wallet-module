@@ -1,14 +1,34 @@
 import { EventContainerV2, Store } from "@common-module/app";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
+import ChainInfo from "./ChainInfo.js";
 import WalletLoginPopup from "./WalletLoginPopup.js";
+import CoinbaseWallet from "./wallets/CoinbaseWallet.js";
+import MetaMask from "./wallets/MetaMask.js";
 import Wallet from "./wallets/Wallet.js";
+import WalletConnect from "./wallets/WalletConnect.js";
 
 class WalletService extends EventContainerV2<{
   addressChanged: (address: string) => void;
 }> {
   private store = new Store("walletServiceStore");
-  private wallets: { [walletId: string]: Wallet } = {};
+  private wallets: { [walletId: string]: Wallet } = {
+    "walletconnect": WalletConnect,
+    "metamask": MetaMask,
+    "coinbase-wallet": CoinbaseWallet,
+  };
   private tryLogin = async () => await new WalletLoginPopup().wait();
+
+  public init(options: {
+    name: string;
+    icon: string;
+    description: string;
+    chains: { [name: string]: ChainInfo };
+    walletConnectProjectId: string;
+  }) {
+    for (const wallet of Object.values(this.wallets)) {
+      wallet.init(options);
+    }
+  }
 
   private async connect(walletId: string): Promise<BrowserProvider> {
     const wallet = this.wallets[walletId];
