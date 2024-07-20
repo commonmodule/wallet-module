@@ -6,4 +6,4 @@ export default class WalletLoginPopup extends Popup {
     private selectWallet;
     wait(): Promise<string>;
 }
-//# sourceMappingURL=ConnectWalletPopup.d.ts.map
+//# sourceMappingURL=WalletLoginPopup.d.ts.map
