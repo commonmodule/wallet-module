@@ -1,4 +1,4 @@
-import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
+import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
 import { StringUtil } from "@common-module/app";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
 import ChainInfo from "../ChainInfo.js";

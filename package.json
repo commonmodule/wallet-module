@@ -13,5 +13,7 @@
     "@web3modal/ethers": "^5.0.7",
     "ethers": "^6.13.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "react": "^18.3.1"
+  }
 }

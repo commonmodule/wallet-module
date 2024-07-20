@@ -1,6 +1,6 @@
 export default interface ChainInfo {
   id: number;
-  rpc: string;
   symbol: string;
+  rpc: string;
   explorerUrl: string;
 }
