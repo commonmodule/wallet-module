@@ -1,5 +1,6 @@
 import { BrowserInfo, Confirm } from "@common-module/app";
 import {
+  BaseContract,
   Contract as EthersContract,
   ContractTransactionResponse,
   Interface,
@@ -9,24 +10,27 @@ import {
 import ChainInfo from "./ChainInfo.js";
 import WalletService from "./WalletService.js";
 
-export default abstract class Contract {
-  private provider: JsonRpcProvider;
-  private viewContract: EthersContract;
+export default abstract class Contract<CT extends BaseContract> {
+  private chain!: ChainInfo;
+  private address!: string;
+  private provider!: JsonRpcProvider;
 
-  constructor(
-    private abi: Interface | InterfaceAbi,
-    private chain: ChainInfo,
-    private address: string,
-  ) {
+  protected viewContract!: CT;
+
+  constructor(private abi: Interface | InterfaceAbi) {}
+
+  public init(chain: ChainInfo, address: string) {
+    this.chain = chain;
+    this.address = address;
     this.viewContract = new EthersContract(
       address,
-      abi,
+      this.abi,
       this.provider = new JsonRpcProvider(chain.rpc),
-    );
+    ) as any;
   }
 
   protected async wait(
-    run: (contract: EthersContract) => Promise<ContractTransactionResponse>,
+    run: (contract: CT) => Promise<ContractTransactionResponse>,
   ) {
     try {
       // fix for MetaMask bug on mobile
@@ -45,7 +49,7 @@ export default abstract class Contract {
         this.abi,
         await WalletService.getSigner(this.chain.id),
       );
-      const tx = await run(contract);
+      const tx = await run(contract as any);
       const checkReceipt = async () => {
         while (true) {
           const receipt = await this.provider.getTransactionReceipt(tx.hash);

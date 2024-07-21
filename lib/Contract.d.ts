@@ -1,12 +1,13 @@
-import { Contract as EthersContract, ContractTransactionResponse, Interface, InterfaceAbi } from "ethers";
+import { BaseContract, ContractTransactionResponse, Interface, InterfaceAbi } from "ethers";
 import ChainInfo from "./ChainInfo.js";
-export default abstract class Contract {
+export default abstract class Contract<CT extends BaseContract> {
     private abi;
     private chain;
     private address;
     private provider;
-    private viewContract;
-    constructor(abi: Interface | InterfaceAbi, chain: ChainInfo, address: string);
-    protected wait(run: (contract: EthersContract) => Promise<ContractTransactionResponse>): Promise<void>;
+    protected viewContract: CT;
+    constructor(abi: Interface | InterfaceAbi);
+    init(chain: ChainInfo, address: string): void;
+    protected wait(run: (contract: CT) => Promise<ContractTransactionResponse>): Promise<void>;
 }
 //# sourceMappingURL=Contract.d.ts.map
