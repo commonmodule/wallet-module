@@ -1,4 +1,9 @@
-import { EventContainerV2, Store } from "@common-module/app";
+import {
+  Confirm,
+  EventContainerV2,
+  MaterialIcon,
+  Store,
+} from "@common-module/app";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import ChainInfo from "./ChainInfo.js";
 import WalletLoginPopup from "./WalletLoginPopup.js";
@@ -16,8 +21,8 @@ class WalletService extends EventContainerV2<{
     "metamask": MetaMask,
     "coinbase-wallet": CoinbaseWallet,
   };
-  private tryLogin = async () => await new WalletLoginPopup().wait();
 
+  public tryLogin = async () => await new WalletLoginPopup().wait();
   public init(options: {
     name: string;
     icon: string;
@@ -25,8 +30,14 @@ class WalletService extends EventContainerV2<{
     chains: { [name: string]: ChainInfo };
     walletConnectProjectId: string;
   }) {
-    for (const wallet of Object.values(this.wallets)) {
+    for (const [walletName, wallet] of Object.entries(this.wallets)) {
       wallet.init(options);
+      wallet.on("addressChanged", (walletAddress) => {
+        if (walletName === this.loggedInWallet) {
+          this.store.set("loggedInAddress", walletAddress);
+          this.emit("addressChanged", walletAddress);
+        }
+      });
     }
   }
 
@@ -80,13 +91,40 @@ class WalletService extends EventContainerV2<{
   }
 
   public async getSigner(targetChainId: number): Promise<JsonRpcSigner> {
-    if (!this.loggedInWallet) throw new Error("Not logged in");
-    const provider = await this.connect(this.loggedInWallet);
+    if (!this.loggedInWallet) {
+      try {
+        await new Confirm({
+          icon: new MaterialIcon("warning"),
+          title: "Login Required",
+          message:
+            "You need to be logged in to perform this action. Would you like to log in using your wallet?",
+        }).wait();
 
+        await this.login();
+        return await this.getSigner(targetChainId);
+      } catch (e) {
+        throw e;
+      }
+    }
+
+    const provider = await this.connect(this.loggedInWallet);
     const walletAddress: string | undefined = (await provider.listAccounts())[0]
       ?.address;
     if (!walletAddress || walletAddress !== this.loggedInAddress) {
-      throw new Error("Wallet address mismatch");
+      try {
+        await new Confirm({
+          icon: new MaterialIcon("warning"),
+          title: "Wallet Address Mismatch",
+          message:
+            "The current connected wallet address doesn't match the logged-in address. Would you like to log in again?",
+        }).wait();
+
+        await this.logout();
+        await this.login();
+        return await this.getSigner(targetChainId);
+      } catch (e) {
+        throw e;
+      }
     }
 
     let currentChainId = Number((await provider.getNetwork()).chainId);

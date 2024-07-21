@@ -1,4 +1,4 @@
-import { BrowserInfo, Confirm } from "@common-module/app";
+import { BrowserInfo, Confirm, MaterialIcon } from "@common-module/app";
 import {
   BaseContract,
   Contract as EthersContract,
@@ -6,6 +6,7 @@ import {
   Interface,
   InterfaceAbi,
   JsonRpcProvider,
+  TransactionReceipt,
 } from "ethers";
 import ChainInfo from "./ChainInfo.js";
 import WalletService from "./WalletService.js";
@@ -13,8 +14,8 @@ import WalletService from "./WalletService.js";
 export default abstract class Contract<CT extends BaseContract> {
   private chain!: ChainInfo;
   private address!: string;
-  private provider!: JsonRpcProvider;
 
+  protected provider!: JsonRpcProvider;
   protected viewContract!: CT;
 
   constructor(private abi: Interface | InterfaceAbi) {}
@@ -31,7 +32,10 @@ export default abstract class Contract<CT extends BaseContract> {
 
   protected async wait(
     run: (contract: CT) => Promise<ContractTransactionResponse>,
-  ) {
+  ): Promise<{
+    contract: CT;
+    receipt: TransactionReceipt | undefined;
+  }> {
     try {
       // fix for MetaMask bug on mobile
       if (
@@ -39,6 +43,7 @@ export default abstract class Contract<CT extends BaseContract> {
         WalletService.loggedInWallet === "metamask"
       ) {
         new Confirm({
+          icon: new MaterialIcon("warning"),
           title: "Transaction Request",
           message: "Please confirm the transaction in MetaMask",
         }, () => WalletService.openWallet());
@@ -48,23 +53,27 @@ export default abstract class Contract<CT extends BaseContract> {
         this.address,
         this.abi,
         await WalletService.getSigner(this.chain.id),
-      );
-      const tx = await run(contract as any);
+      ) as any;
+      const tx = await run(contract);
       const checkReceipt = async () => {
         while (true) {
           const receipt = await this.provider.getTransactionReceipt(tx.hash);
-          if (receipt?.blockNumber && receipt.status === 1) return;
+          if (receipt?.blockNumber && receipt.status === 1) return receipt;
           await new Promise((resolve) => setTimeout(resolve, 3000));
         }
       };
-      await Promise.race([checkReceipt(), tx.wait()]);
+      const receipt = await Promise.race([checkReceipt(), tx.wait()]);
+      return {
+        contract,
+        receipt: receipt ?? undefined,
+      };
     } catch (e: any) {
       console.error(e);
 
       // fix for MetaMask bug on mobile
       if (e.message?.includes("MetaMask is not connected/installed,")) {
         await WalletService.disconnect();
-        await this.wait(run); // retry
+        return await this.wait(run); // retry
       } else throw e;
     }
   }

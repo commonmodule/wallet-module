@@ -14,5 +14,6 @@ export default interface Wallet {
     connect(): Promise<BrowserProvider>;
     disconnect(): Promise<void>;
     switchChain(chainId: number): Promise<void>;
+    on(event: "addressChanged", listener: (address: string) => void): void;
 }
 //# sourceMappingURL=Wallet.d.ts.map

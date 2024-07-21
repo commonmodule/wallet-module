@@ -1,7 +1,10 @@
+import { EventContainerV2 } from "@common-module/app";
 import { BrowserProvider } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
-declare class CoinbaseWallet implements Wallet {
+declare class CoinbaseWallet extends EventContainerV2<{
+    addressChanged: (address: string) => void;
+}> implements Wallet {
     private chains;
     private eip1193Provider;
     init(options: {

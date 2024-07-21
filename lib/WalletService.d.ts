@@ -6,7 +6,7 @@ declare class WalletService extends EventContainerV2<{
 }> {
     private store;
     private wallets;
-    private tryLogin;
+    tryLogin: () => Promise<string>;
     init(options: {
         name: string;
         icon: string;
