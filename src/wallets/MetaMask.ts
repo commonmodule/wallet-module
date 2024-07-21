@@ -1,10 +1,12 @@
-import { StringUtil } from "@common-module/app";
-import MetaMaskSDK from "@metamask/sdk";
+import { EventContainerV2, StringUtil } from "@common-module/app";
+import { MetaMaskSDK } from "@metamask/sdk";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
 
-class MetaMask implements Wallet {
+class MetaMask extends EventContainerV2<{
+  addressChanged: (address: string) => void;
+}> implements Wallet {
   private chains!: { [name: string]: ChainInfo };
   private metaMaskSdk: MetaMaskSDK | undefined;
   private eip1193Provider: Eip1193Provider | undefined;
@@ -15,7 +17,12 @@ class MetaMask implements Wallet {
     chains: { [name: string]: ChainInfo };
   }) {
     this.chains = options.chains;
-    if (!window.ethereum) {
+    if (window.ethereum) {
+      const accountsChanged: any = ([address]: string[]) => {
+        this.emit("addressChanged", address);
+      };
+      window.ethereum.on("accountsChanged", accountsChanged);
+    } else {
       this.metaMaskSdk = new MetaMaskSDK({
         dappMetadata: {
           name: options.name,
@@ -24,6 +31,10 @@ class MetaMask implements Wallet {
         },
       });
     }
+  }
+
+  public open() {
+    window.open("https://metamask.app.link");
   }
 
   public async connect(): Promise<BrowserProvider> {

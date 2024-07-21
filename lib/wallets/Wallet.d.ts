@@ -10,6 +10,7 @@ export default interface Wallet {
         };
         walletConnectProjectId: string;
     }): void;
+    open(): void;
     connect(): Promise<BrowserProvider>;
     disconnect(): Promise<void>;
     switchChain(chainId: number): Promise<void>;

@@ -1,9 +1,12 @@
+import { EventContainerV2 } from "@common-module/app";
 import { createWeb3Modal, defaultConfig, Web3Modal } from "@web3modal/ethers";
 import { BrowserProvider } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
 
-class WalletConnect implements Wallet {
+class WalletConnect extends EventContainerV2<{
+  addressChanged: (address: string) => void;
+}> implements Wallet {
   private web3Modal!: Web3Modal;
 
   private resolveConnection?: () => void;
@@ -43,21 +46,35 @@ class WalletConnect implements Wallet {
       }
     });
 
+    let cachedAddress = this.web3Modal.getAddress();
     this.web3Modal.subscribeProvider((newState) => {
       if (newState.address && this.resolveConnection) {
         this.resolveConnection();
         this.rejectConnection = undefined;
         this.resolveConnection = undefined;
       }
+      if (newState.address && cachedAddress !== newState.address) {
+        this.emit("addressChanged", newState.address);
+        cachedAddress = newState.address;
+      }
     });
   }
 
+  public open() {
+    this.web3Modal.open();
+  }
+
   public async connect(): Promise<BrowserProvider> {
-    await new Promise<void>((resolve, reject) => {
-      this.resolveConnection = resolve;
-      this.rejectConnection = reject;
-      this.web3Modal.open();
-    });
+    const walletAddress = this.web3Modal.getAddress();
+    if (walletAddress !== undefined) {
+      this.emit("addressChanged", walletAddress);
+    } else {
+      await new Promise<void>((resolve, reject) => {
+        this.resolveConnection = resolve;
+        this.rejectConnection = reject;
+        this.web3Modal.open();
+      });
+    }
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");
     return new BrowserProvider(walletProvider);

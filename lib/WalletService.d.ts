@@ -16,6 +16,7 @@ declare class WalletService extends EventContainerV2<{
         };
         walletConnectProjectId: string;
     }): void;
+    openWallet(): void;
     private connect;
     disconnect(): Promise<void>;
     get loggedInWallet(): string | undefined;

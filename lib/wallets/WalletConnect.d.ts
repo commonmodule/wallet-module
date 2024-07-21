@@ -1,7 +1,10 @@
+import { EventContainerV2 } from "@common-module/app";
 import { BrowserProvider } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
-declare class WalletConnect implements Wallet {
+declare class WalletConnect extends EventContainerV2<{
+    addressChanged: (address: string) => void;
+}> implements Wallet {
     private web3Modal;
     private resolveConnection?;
     private rejectConnection?;
@@ -14,6 +17,7 @@ declare class WalletConnect implements Wallet {
         };
         walletConnectProjectId: string;
     }): void;
+    open(): void;
     connect(): Promise<BrowserProvider>;
     disconnect(): Promise<void>;
     switchChain(chainId: number): Promise<void>;

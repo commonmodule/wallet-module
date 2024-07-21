@@ -20,6 +20,10 @@ class CoinbaseWallet implements Wallet {
     }).makeWeb3Provider();
   }
 
+  public open() {
+    window.open("https://coinbasewallet.app.link");
+  }
+
   public async connect(): Promise<BrowserProvider> {
     await this.eip1193Provider.request({ method: "eth_requestAccounts" });
     return new BrowserProvider(this.eip1193Provider);

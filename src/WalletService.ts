@@ -30,6 +30,11 @@ class WalletService extends EventContainerV2<{
     }
   }
 
+  public openWallet() {
+    if (!this.loggedInWallet) throw new Error("Not logged in");
+    this.wallets[this.loggedInWallet].open();
+  }
+
   private async connect(walletId: string): Promise<BrowserProvider> {
     const wallet = this.wallets[walletId];
     if (!wallet) throw new Error(`Wallet ${walletId} not found`);
@@ -77,6 +82,13 @@ class WalletService extends EventContainerV2<{
   public async getSigner(targetChainId: number): Promise<JsonRpcSigner> {
     if (!this.loggedInWallet) throw new Error("Not logged in");
     const provider = await this.connect(this.loggedInWallet);
+
+    const walletAddress: string | undefined = (await provider.listAccounts())[0]
+      ?.address;
+    if (!walletAddress || walletAddress !== this.loggedInAddress) {
+      throw new Error("Wallet address mismatch");
+    }
+
     let currentChainId = Number((await provider.getNetwork()).chainId);
     if (currentChainId !== targetChainId) {
       await this.wallets[this.loggedInWallet].switchChain(targetChainId);
@@ -85,6 +97,7 @@ class WalletService extends EventContainerV2<{
     if (currentChainId !== targetChainId) {
       throw new Error("Failed to switch chain");
     }
+
     return provider.getSigner();
   }
 }

@@ -1,3 +1,4 @@
+import { BrowserInfo, Confirm } from "@common-module/app";
 import {
   Contract as EthersContract,
   ContractTransactionResponse,
@@ -28,6 +29,17 @@ export default abstract class Contract {
     run: (contract: EthersContract) => Promise<ContractTransactionResponse>,
   ) {
     try {
+      // fix for MetaMask bug on mobile
+      if (
+        BrowserInfo.isMobileDevice &&
+        WalletService.loggedInWallet === "metamask"
+      ) {
+        new Confirm({
+          title: "Transaction Request",
+          message: "Please confirm the transaction in MetaMask",
+        }, () => WalletService.openWallet());
+      }
+
       const contract = new EthersContract(
         this.address,
         this.abi,

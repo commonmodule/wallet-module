@@ -11,6 +11,7 @@ declare class CoinbaseWallet implements Wallet {
             [name: string]: ChainInfo;
         };
     }): void;
+    open(): void;
     connect(): Promise<BrowserProvider>;
     disconnect(): Promise<void>;
     switchChain(chainId: number): Promise<void>;
