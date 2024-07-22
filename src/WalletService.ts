@@ -101,7 +101,8 @@ class WalletService extends EventContainerV2<{
         }).wait();
 
         await this.login();
-        return await this.getSigner(targetChainId);
+
+        return await this.getSigner(targetChainId); // retry
       } catch (e) {
         throw e;
       }
@@ -121,19 +122,17 @@ class WalletService extends EventContainerV2<{
 
         await this.logout();
         await this.login();
-        return await this.getSigner(targetChainId);
+
+        return await this.getSigner(targetChainId); // retry
       } catch (e) {
         throw e;
       }
     }
 
-    let currentChainId = Number((await provider.getNetwork()).chainId);
+    const currentChainId = Number((await provider.getNetwork()).chainId);
     if (currentChainId !== targetChainId) {
       await this.wallets[this.loggedInWallet].switchChain(targetChainId);
-    }
-    currentChainId = Number((await provider.getNetwork()).chainId);
-    if (currentChainId !== targetChainId) {
-      throw new Error("Failed to switch chain");
+      return await this.getSigner(targetChainId); // retry
     }
 
     return provider.getSigner();
