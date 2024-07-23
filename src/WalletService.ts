@@ -13,7 +13,7 @@ import Wallet from "./wallets/Wallet.js";
 import WalletConnect from "./wallets/WalletConnect.js";
 
 class WalletService extends EventContainerV2<{
-  addressChanged: (address: string) => void;
+  addressChanged: (address: string | undefined) => void;
 }> {
   private store = new Store("walletServiceStore");
   private wallets: { [walletId: string]: Wallet } = {
@@ -76,11 +76,14 @@ class WalletService extends EventContainerV2<{
     const walletAddress: string | undefined = (await provider.listAccounts())[0]
       ?.address;
     if (walletAddress) {
-      if (walletAddress !== this.loggedInAddress) {
-        this.emit("addressChanged", walletAddress);
-      }
+      const currentAddress = this.loggedInAddress;
+
       this.store.set("loggedInWallet", walletId);
       this.store.set("loggedInAddress", walletAddress);
+
+      if (walletAddress !== currentAddress) {
+        this.emit("addressChanged", walletAddress);
+      }
     }
   }
 
@@ -88,6 +91,7 @@ class WalletService extends EventContainerV2<{
     this.store.delete("loggedInWallet");
     this.store.delete("loggedInAddress");
     await this.disconnect();
+    this.emit("addressChanged", undefined);
   }
 
   public async getSigner(targetChainId: number): Promise<JsonRpcSigner> {
