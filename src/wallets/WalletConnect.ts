@@ -1,6 +1,6 @@
 import { EventContainerV2 } from "@common-module/app";
 import { createWeb3Modal, defaultConfig, Web3Modal } from "@web3modal/ethers";
-import { BrowserProvider } from "ethers";
+import { BrowserProvider, getAddress } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
 
@@ -54,7 +54,7 @@ class WalletConnect extends EventContainerV2<{
         this.resolveConnection = undefined;
       }
       if (newState.address && cachedAddress !== newState.address) {
-        this.emit("addressChanged", newState.address);
+        this.emit("addressChanged", getAddress(newState.address));
         cachedAddress = newState.address;
       }
     });
@@ -67,7 +67,7 @@ class WalletConnect extends EventContainerV2<{
   public async connect(): Promise<BrowserProvider> {
     const walletAddress = this.web3Modal.getAddress();
     if (walletAddress !== undefined) {
-      this.emit("addressChanged", walletAddress);
+      this.emit("addressChanged", getAddress(walletAddress));
     } else {
       await new Promise<void>((resolve, reject) => {
         this.resolveConnection = resolve;

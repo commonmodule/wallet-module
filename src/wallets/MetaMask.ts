@@ -1,6 +1,6 @@
 import { EventContainerV2, StringUtil } from "@common-module/app";
 import { MetaMaskSDK } from "@metamask/sdk";
-import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
+import { BrowserProvider, Eip1193Provider, ethers, getAddress } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
 
@@ -19,7 +19,7 @@ class MetaMask extends EventContainerV2<{
     this.chains = options.chains;
     if (window.ethereum) {
       const accountsChanged: any = ([address]: string[]) => {
-        this.emit("addressChanged", address);
+        this.emit("addressChanged", getAddress(address));
       };
       window.ethereum.on("accountsChanged", accountsChanged);
     } else {
