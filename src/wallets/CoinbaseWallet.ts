@@ -1,10 +1,10 @@
 import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
-import { EventContainerV2, StringUtil } from "@common-module/app";
+import { EventContainer, StringUtil } from "@common-module/ts";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
 
-class CoinbaseWallet extends EventContainerV2<{
+class CoinbaseWallet extends EventContainer<{
   addressChanged: (address: string) => void;
 }> implements Wallet {
   private chains!: { [name: string]: ChainInfo };

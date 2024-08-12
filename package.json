@@ -8,7 +8,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.0.4",
-    "@common-module/app": "^0.0.3",
+    "@common-module/app-components": "^0.0.1",
+    "@common-module/material-icons": "^0.0.1",
     "@metamask/sdk": "^0.26.5",
     "@web3modal/ethers": "^5.0.7",
     "ethers": "^6.13.1"

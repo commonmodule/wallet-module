@@ -1,4 +1,4 @@
-import { BrowserInfo, Confirm, MaterialIcon } from "@common-module/app";
+import { BrowserInfo } from "@common-module/app";
 import {
   BaseContract,
   Contract as EthersContract,
@@ -10,6 +10,8 @@ import {
 } from "ethers";
 import ChainInfo from "./ChainInfo.js";
 import WalletService from "./WalletService.js";
+import { Confirm } from "@common-module/app-components";
+import { MaterialIcon } from "@common-module/material-icons";
 
 export default abstract class Contract<CT extends BaseContract> {
   private chain!: ChainInfo;

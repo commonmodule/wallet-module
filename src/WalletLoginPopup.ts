@@ -1,4 +1,4 @@
-import { Button, ButtonType, el, Popup } from "@common-module/app";
+import { el } from "@common-module/app";
 
 export default class WalletLoginPopup extends Popup {
   private resolve: ((walletId: string) => void) | undefined;

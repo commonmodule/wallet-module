@@ -1,8 +1,8 @@
-import { EventContainerV2 } from "@common-module/app";
+import { EventContainer } from "@common-module/ts";
 import { BrowserProvider } from "ethers";
 import ChainInfo from "../ChainInfo.js";
 import Wallet from "./Wallet.js";
-declare class WalletConnect extends EventContainerV2<{
+declare class WalletConnect extends EventContainer<{
     addressChanged: (address: string) => void;
 }> implements Wallet {
     private web3Modal;

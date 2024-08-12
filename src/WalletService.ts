@@ -1,9 +1,7 @@
-import {
-  Confirm,
-  EventContainerV2,
-  MaterialIcon,
-  Store,
-} from "@common-module/app";
+import { Store } from "@common-module/app";
+import { Confirm } from "@common-module/app-components";
+import { MaterialIcon } from "@common-module/material-icons";
+import { EventContainer } from "@common-module/ts";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import ChainInfo from "./ChainInfo.js";
 import WalletLoginPopup from "./WalletLoginPopup.js";
@@ -12,7 +10,7 @@ import MetaMask from "./wallets/MetaMask.js";
 import Wallet from "./wallets/Wallet.js";
 import WalletConnect from "./wallets/WalletConnect.js";
 
-class WalletService extends EventContainerV2<{
+class WalletService extends EventContainer<{
   addressChanged: (address: string | undefined) => void;
 }> {
   private store = new Store("walletServiceStore");
