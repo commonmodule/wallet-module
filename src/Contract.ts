@@ -1,8 +1,10 @@
 import { BrowserInfo } from "@common-module/app";
+import { Confirm } from "@common-module/app-components";
+import { MaterialIcon } from "@common-module/material-icons";
 import {
   BaseContract,
-  Contract as EthersContract,
   ContractTransactionResponse,
+  Contract as EthersContract,
   Interface,
   InterfaceAbi,
   JsonRpcProvider,
@@ -10,8 +12,6 @@ import {
 } from "ethers";
 import ChainInfo from "./ChainInfo.js";
 import WalletService from "./WalletService.js";
-import { Confirm } from "@common-module/app-components";
-import { MaterialIcon } from "@common-module/material-icons";
 
 export default abstract class Contract<CT extends BaseContract> {
   private chain!: ChainInfo;
@@ -48,7 +48,8 @@ export default abstract class Contract<CT extends BaseContract> {
           icon: new MaterialIcon("warning"),
           title: "Transaction Request",
           message: "Please confirm the transaction in MetaMask",
-        }, () => WalletService.openWallet());
+          onConfirm: () => WalletService.openWallet(),
+        });
       }
 
       const contract = new EthersContract(

@@ -1,5 +1,5 @@
-import { Popup } from "@common-module/app";
-export default class WalletLoginPopup extends Popup {
+import { Modal } from "@common-module/app-components";
+export default class WalletLoginPopup extends Modal {
     private resolve;
     private reject;
     constructor();
