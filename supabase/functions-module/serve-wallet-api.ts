@@ -26,7 +26,7 @@ export async function serveWalletApi(context: Context) {
     context.response = response(data.nonce);
   }
 
-  if (uri === "sign-in") {
+  if (uri === "login") {
     //TODO:
   }
 
