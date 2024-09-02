@@ -1,0 +1,1 @@
+{"version":3,"file":"MetaMaskConnector.d.ts","sourceRoot":"","sources":["../../src/wallet-connectors/MetaMaskConnector.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,eAAe,EAAmB,MAAM,QAAQ,CAAC;AAC1D,OAAO,eAAe,MAAM,sBAAsB,CAAC;AAEnD,cAAM,iBAAkB,YAAW,eAAe;IAChD,OAAO,CAAC,WAAW,CAA0B;IAC7C,OAAO,CAAC,eAAe,CAA8B;IAExC,OAAO;CAerB;;AAED,wBAAuC"}

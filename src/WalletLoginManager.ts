@@ -1,5 +1,6 @@
 import { EventContainer } from "@common-module/ts";
 import { Store } from "../../app-module/lib/index.js";
+import WalletLoginPopup from "./WalletLoginPopup.js";
 import WalletTokenManager from "./WalletTokenManager.js";
 
 class WalletLoginManager extends EventContainer<{
@@ -21,9 +22,10 @@ class WalletLoginManager extends EventContainer<{
       this.loggedInWallet !== undefined;
   }
 
-  public login(): void {
+  public async login() {
+    const { walletId, walletAddress } = await new WalletLoginPopup().wait();
     //TODO:
-    console.log("login");
+    console.log(walletId, walletAddress);
   }
 
   public logout(): void {

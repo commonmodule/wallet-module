@@ -1,0 +1,1 @@
+{"version":3,"file":"UniversalWalletConnector.d.ts","sourceRoot":"","sources":["../src/UniversalWalletConnector.ts"],"names":[],"mappings":"AAGA,OAAO,eAAe,MAAM,wCAAwC,CAAC;AAErE,cAAM,wBAAwB;IACrB,gBAAgB,EAAE;QAAE,CAAC,QAAQ,EAAE,MAAM,GAAG,eAAe,CAAA;KAAE,CAI9D;IAEW,OAAO,CAAC,QAAQ,EAAE,MAAM;CAKtC;;AAED,wBAA8C"}

@@ -3,7 +3,10 @@ export default class WalletLoginPopup extends Modal {
     private resolve;
     private reject;
     constructor();
-    private selectWallet;
-    wait(): Promise<string>;
+    private connect;
+    wait(): Promise<{
+        walletId: string;
+        walletAddress: string;
+    }>;
 }
 //# sourceMappingURL=WalletLoginPopup.d.ts.map

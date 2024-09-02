@@ -6,7 +6,7 @@ declare class WalletLoginManager extends EventContainer<{
     get loggedInWallet(): string | undefined;
     get loggedInAddress(): string | undefined;
     get loggedIn(): boolean;
-    login(): void;
+    login(): Promise<void>;
     logout(): void;
 }
 declare const _default: WalletLoginManager;
