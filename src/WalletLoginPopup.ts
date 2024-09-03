@@ -61,12 +61,21 @@ export default class WalletLoginPopup extends Modal {
   }
 
   private async connect(walletId: string) {
-    const provider = await UniversalWalletConnector.connect(walletId);
-    const walletAddress: string | undefined = (await provider.listAccounts())[0]
-      ?.address;
-    if (walletAddress) {
-      this.resolve?.({ walletId, walletAddress });
-      this.remove();
+    // Temporarily close the popup while the wallet connection process is underway.
+    this.offDom("close", this.closeListener).element.close();
+
+    try {
+      const provider = await UniversalWalletConnector.connect(walletId);
+      const walletAddress: string | undefined =
+        (await provider.listAccounts())[0]
+          ?.address;
+      if (walletAddress) {
+        this.resolve?.({ walletId, walletAddress });
+        this.remove();
+      }
+    } catch (error) {
+      console.error(error);
+      this.onDom("close", this.closeListener).element.showModal();
     }
   }
 
