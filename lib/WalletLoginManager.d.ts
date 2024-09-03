@@ -1,4 +1,7 @@
-declare class WalletLoginManager {
+import { EventContainer } from "@common-module/ts";
+declare class WalletLoginManager extends EventContainer<{
+    loginStatusChanged: () => void;
+}> {
     get loggedIn(): boolean;
     login(): Promise<void>;
     logout(): void;

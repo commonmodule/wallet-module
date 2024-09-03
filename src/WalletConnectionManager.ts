@@ -1,6 +1,9 @@
 import { Store } from "@common-module/app";
+import { EventContainer } from "@common-module/ts";
 
-class WalletConnectionManager {
+class WalletConnectionManager extends EventContainer<{
+  connectionChanged: () => void;
+}> {
   private store = new Store("wallet-connection-manager");
 
   public get connectedWallet() {
