@@ -1,7 +1,12 @@
 import { EventContainer } from "@common-module/ts";
-import { Web3Modal } from "@web3modal/ethers";
+import { createWeb3Modal, defaultConfig, Web3Modal } from "@web3modal/ethers";
 import { BrowserProvider, ethers } from "ethers";
-import WalletConnector from "./WalletConnector.js";
+import WalletConnector, { WalletConnectorOptions } from "./WalletConnector.js";
+
+export interface WalletConnectConnectorOptions extends WalletConnectorOptions {
+  description: string;
+  walletConnectProjectId: string;
+}
 
 class WalletConnectConnector extends EventContainer<{
   addressChanged: (address: string) => void;
@@ -10,6 +15,48 @@ class WalletConnectConnector extends EventContainer<{
 
   private resolveConnection: (() => void) | undefined;
   private rejectConnection: ((error: Error) => void) | undefined;
+
+  public init(options: WalletConnectConnectorOptions) {
+    this.web3Modal = createWeb3Modal({
+      projectId: options.walletConnectProjectId,
+      ethersConfig: defaultConfig({
+        metadata: {
+          name: options.name,
+          description: options.description,
+          url: window.location.origin,
+          icons: [options.icon],
+        },
+      }),
+      chains: Object.entries(options.chains).map(([name, info]) => ({
+        chainId: info.id,
+        name,
+        currency: info.symbol,
+        rpcUrl: info.rpc,
+        explorerUrl: info.explorerUrl,
+      })),
+    });
+
+    this.web3Modal.subscribeEvents((newEvent) => {
+      if (newEvent.data.event === "MODAL_CLOSE" && this.rejectConnection) {
+        this.rejectConnection(new Error("User closed WalletConnect modal"));
+        this.rejectConnection = undefined;
+        this.resolveConnection = undefined;
+      }
+    });
+
+    let cachedAddress = this.web3Modal.getAddress();
+    this.web3Modal.subscribeProvider((newState) => {
+      if (newState.address && this.resolveConnection) {
+        this.resolveConnection();
+        this.rejectConnection = undefined;
+        this.resolveConnection = undefined;
+      }
+      if (newState.address && cachedAddress !== newState.address) {
+        this.emit("addressChanged", ethers.getAddress(newState.address));
+        cachedAddress = newState.address;
+      }
+    });
+  }
 
   public async connect() {
     if (!this.web3Modal) throw new Error("Web3Modal not initialized");

@@ -1,5 +1,5 @@
+import { el } from "@common-module/app";
 import { Button, ButtonType, Modal } from "@common-module/app-components";
-import { el } from "../../app-module/lib/index.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
 export default class WalletLoginPopup extends Modal {

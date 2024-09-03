@@ -1,10 +1,30 @@
-import MetaMaskSDK from "@metamask/sdk";
-import { BrowserProvider, Eip1193Provider } from "ethers";
-import WalletConnector from "./WalletConnector.js";
+import { EventContainer } from "@common-module/ts";
+import { MetaMaskSDK } from "@metamask/sdk";
+import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
+import WalletConnector, { WalletConnectorOptions } from "./WalletConnector.js";
 
-class MetaMaskConnector implements WalletConnector {
+class MetaMaskConnector extends EventContainer<{
+  addressChanged: (address: string) => void;
+}> implements WalletConnector {
   private metaMaskSdk: MetaMaskSDK | undefined;
   private eip1193Provider: Eip1193Provider | undefined;
+
+  public init(options: WalletConnectorOptions) {
+    if (window.ethereum) {
+      const accountsChanged: any = ([address]: string[]) => {
+        this.emit("addressChanged", ethers.getAddress(address));
+      };
+      window.ethereum.on("accountsChanged", accountsChanged);
+    } else {
+      this.metaMaskSdk = new MetaMaskSDK({
+        dappMetadata: {
+          name: options.name,
+          url: window.location.origin,
+          iconUrl: options.icon,
+        },
+      });
+    }
+  }
 
   public async connect() {
     if (window.ethereum) {

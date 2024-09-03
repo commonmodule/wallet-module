@@ -1,7 +1,12 @@
+import { Modal } from "@common-module/app-components";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
-import WalletConnectConnector from "./wallet-connectors/WalletConnectConnector.js";
-import WalletConnector from "./wallet-connectors/WalletConnector.js";
+import WalletConnectConnector, {
+  WalletConnectConnectorOptions,
+} from "./wallet-connectors/WalletConnectConnector.js";
+import WalletConnector, {
+  WalletConnectorOptions,
+} from "./wallet-connectors/WalletConnector.js";
 
 class UniversalWalletConnector {
   public walletConnectors: { [walletId: string]: WalletConnector } = {
@@ -9,6 +14,12 @@ class UniversalWalletConnector {
     "metamask": MetaMaskConnector,
     "coinbase-wallet": CoinbaseWalletConnector,
   };
+
+  public init(options: WalletConnectorOptions | WalletConnectConnectorOptions) {
+    for (const walletConnector of Object.values(this.walletConnectors)) {
+      walletConnector.init(options);
+    }
+  }
 
   public async connect(walletId: string) {
     const walletConnector = this.walletConnectors[walletId];

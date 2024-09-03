@@ -1,7 +1,8 @@
 import { BrowserProvider } from "ethers";
-import WalletConnector from "./WalletConnector.js";
+import WalletConnector, { WalletConnectorOptions } from "./WalletConnector.js";
 declare class CoinbaseWalletConnector implements WalletConnector {
     private eip1193Provider;
+    init(options: WalletConnectorOptions): void;
     connect(): Promise<BrowserProvider>;
 }
 declare const _default: CoinbaseWalletConnector;
