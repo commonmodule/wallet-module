@@ -1,6 +1,6 @@
 import { EventContainer } from "@common-module/ts";
 import { BrowserProvider } from "ethers";
-import WalletConnector, { WalletConnectorOptions } from "./WalletConnector.js";
+import WalletConnector, { ChainInfo, WalletConnectorOptions } from "./WalletConnector.js";
 export interface WalletConnectConnectorOptions extends WalletConnectorOptions {
     description: string;
     walletConnectProjectId: string;
@@ -8,11 +8,13 @@ export interface WalletConnectConnectorOptions extends WalletConnectorOptions {
 declare class WalletConnectConnector extends EventContainer<{
     addressChanged: (address: string) => void;
 }> implements WalletConnector {
-    private web3Modal;
+    private _web3Modal;
+    private get web3Modal();
     private resolveConnection;
     private rejectConnection;
     init(options: WalletConnectConnectorOptions): void;
     connect(): Promise<BrowserProvider>;
+    addChain(chain: ChainInfo): Promise<void>;
 }
 declare const _default: WalletConnectConnector;
 export default _default;

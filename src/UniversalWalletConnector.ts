@@ -15,7 +15,13 @@ class UniversalWalletConnector {
     "coinbase-wallet": CoinbaseWalletConnector,
   };
 
+  private options:
+    | WalletConnectorOptions
+    | WalletConnectConnectorOptions
+    | undefined;
+
   public init(options: WalletConnectorOptions | WalletConnectConnectorOptions) {
+    this.options = options;
     for (const walletConnector of Object.values(this.walletConnectors)) {
       walletConnector.init(options);
     }
@@ -34,6 +40,16 @@ class UniversalWalletConnector {
     const accounts = await provider.listAccounts();
     if (accounts.length === 0) throw new Error("No accounts found");
     return accounts[0].address;
+  }
+
+  public async addChain(walletId: string, chainName: string): Promise<void> {
+    const chainInfo = this.options?.chains[chainName];
+    if (!chainInfo) throw new Error(`Chain ${chainName} not found`);
+
+    const walletConnector = this.walletConnectors[walletId];
+    if (!walletConnector) throw new Error(`Unsupported walletId: ${walletId}`);
+
+    await walletConnector.addChain(chainInfo);
   }
 }
 

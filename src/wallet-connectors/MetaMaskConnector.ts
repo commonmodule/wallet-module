@@ -1,7 +1,10 @@
-import { EventContainer } from "@common-module/ts";
+import { EventContainer, StringUtil } from "@common-module/ts";
 import { MetaMaskSDK } from "@metamask/sdk";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
-import WalletConnector, { WalletConnectorOptions } from "./WalletConnector.js";
+import WalletConnector, {
+  ChainInfo,
+  WalletConnectorOptions,
+} from "./WalletConnector.js";
 
 class MetaMaskConnector extends EventContainer<{
   addressChanged: (address: string) => void;
@@ -39,6 +42,29 @@ class MetaMaskConnector extends EventContainer<{
       }
       await this.eip1193Provider.request({ method: "eth_requestAccounts" });
       return new BrowserProvider(this.eip1193Provider);
+    }
+  }
+
+  public async addChain(chain: ChainInfo) {
+    const param = {
+      chainId: ethers.toBeHex(chain.id).replace(/^0x0+/, "0x"),
+      chainName: StringUtil.capitalize(chain.name),
+      blockExplorerUrls: [chain.explorerUrl],
+      nativeCurrency: { symbol: chain.symbol, decimals: 18 },
+      rpcUrls: [chain.rpc],
+    };
+
+    if (window.ethereum) {
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [param],
+      });
+    } else {
+      if (!this.eip1193Provider) throw new Error("No EIP-1193 provider");
+      await this.eip1193Provider.request({
+        method: "wallet_addEthereumChain",
+        params: [param],
+      });
     }
   }
 }
