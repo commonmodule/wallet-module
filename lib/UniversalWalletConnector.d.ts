@@ -1,3 +1,4 @@
+import { BrowserProvider } from "ethers";
 import { WalletConnectConnectorOptions } from "./wallet-connectors/WalletConnectConnector.js";
 import WalletConnector, { WalletConnectorOptions } from "./wallet-connectors/WalletConnector.js";
 declare class UniversalWalletConnector {
@@ -5,7 +6,8 @@ declare class UniversalWalletConnector {
         [walletId: string]: WalletConnector;
     };
     init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
-    connect(walletId: string): Promise<import("ethers").BrowserProvider>;
+    connectAndGetProvider(walletId: string): Promise<BrowserProvider>;
+    connectAndGetAddress(walletId: string): Promise<string>;
 }
 declare const _default: UniversalWalletConnector;
 export default _default;

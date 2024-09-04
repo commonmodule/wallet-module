@@ -1,4 +1,4 @@
-import { Modal } from "@common-module/app-components";
+import { BrowserProvider } from "ethers";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
 import WalletConnectConnector, {
@@ -21,10 +21,19 @@ class UniversalWalletConnector {
     }
   }
 
-  public async connect(walletId: string) {
+  public async connectAndGetProvider(
+    walletId: string,
+  ): Promise<BrowserProvider> {
     const walletConnector = this.walletConnectors[walletId];
     if (!walletConnector) throw new Error(`Unsupported walletId: ${walletId}`);
     return await walletConnector.connect();
+  }
+
+  public async connectAndGetAddress(walletId: string): Promise<string> {
+    const provider = await this.connectAndGetProvider(walletId);
+    const accounts = await provider.listAccounts();
+    if (accounts.length === 0) throw new Error("No accounts found");
+    return accounts[0].address;
   }
 }
 

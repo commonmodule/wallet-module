@@ -2,17 +2,17 @@ import { el } from "@common-module/app";
 import { Button, ButtonType, Modal } from "@common-module/app-components";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
-export default class WalletLoginPopup extends Modal {
+export default class WalletConnectionPopup extends Modal {
   private resolve:
     | ((result: { walletId: string; walletAddress: string }) => void)
     | undefined;
   private reject: ((reason: Error) => void) | undefined;
 
   constructor() {
-    super(".wallet-login-popup");
+    super(".wallet-connection-popup");
 
     this.append(
-      el("header", el("h1", "Login with Crypto Wallet")),
+      el("header", el("h1", "Connect Your Crypto Wallet")),
       el(
         "main",
         el(
@@ -21,21 +21,21 @@ export default class WalletLoginPopup extends Modal {
           new Button({
             type: ButtonType.Contained,
             icon: el("img", { src: "/images/wallet-icons/walletconnect.svg" }),
-            title: "Login with WalletConnect",
+            title: "Connect with WalletConnect",
             onClick: async () => await this.connect("walletconnect"),
           }),
         ),
         el(
           "section",
-          el("h2", "Direct Login"),
+          el("h2", "Direct Connection"),
           el(
             "p",
-            "These options are available when WalletConnect is not working properly. Direct login requires re-authentication each time you start the app, which may be less convenient compared to WalletConnect.",
+            "These options are available when WalletConnect is not working properly. Direct connection requires re-authentication each time you start the app, which may be less convenient compared to WalletConnect.",
           ),
           new Button({
             type: ButtonType.Contained,
             icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
-            title: "Login with MetaMask",
+            title: "Connect with MetaMask",
             onClick: async () => await this.connect("metamask"),
           }),
           new Button({
@@ -43,7 +43,7 @@ export default class WalletLoginPopup extends Modal {
             icon: el("img", {
               src: "/images/wallet-icons/coinbase-wallet.svg",
             }),
-            title: "Login with Coinbase Wallet",
+            title: "Connect with Coinbase Wallet",
             onClick: async () => await this.connect("coinbase-wallet"),
           }),
         ),
@@ -57,22 +57,21 @@ export default class WalletLoginPopup extends Modal {
       ),
     );
 
-    this.on("remove", () => this.reject?.(new Error("Login canceled by user")));
+    this.on(
+      "remove",
+      () => this.reject?.(new Error("Connection canceled by user")),
+    );
   }
 
   private async connect(walletId: string) {
     // Temporarily close the popup while the wallet connection process is underway.
     this.offDom("close", this.closeListener).element.close();
-
     try {
-      const provider = await UniversalWalletConnector.connect(walletId);
-      const walletAddress: string | undefined =
-        (await provider.listAccounts())[0]
-          ?.address;
-      if (walletAddress) {
-        this.resolve?.({ walletId, walletAddress });
-        this.remove();
-      }
+      const walletAddress = await UniversalWalletConnector.connectAndGetAddress(
+        walletId,
+      );
+      this.resolve?.({ walletId, walletAddress });
+      this.remove();
     } catch (error) {
       console.error(error);
       this.onDom("close", this.closeListener).element.showModal();
