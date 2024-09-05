@@ -16,6 +16,10 @@ class WalletConnectionManager extends EventContainer<{
     return this.store.get<string>("connectedAddress");
   }
 
+  public get connected() {
+    return !!this.connectedWallet && !!this.connectedAddress;
+  }
+
   public async connect() {
     const { walletId, walletAddress } = await new WalletConnectionPopup()
       .wait();

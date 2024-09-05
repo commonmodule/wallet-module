@@ -6,7 +6,7 @@ export interface WalletConnectConnectorOptions extends WalletConnectorOptions {
     walletConnectProjectId: string;
 }
 declare class WalletConnectConnector extends EventContainer<{
-    addressChanged: (address: string) => void;
+    addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
     private _web3Modal;
     private get web3Modal();

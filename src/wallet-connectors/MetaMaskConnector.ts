@@ -7,7 +7,7 @@ import WalletConnector, {
 } from "./WalletConnector.js";
 
 class MetaMaskConnector extends EventContainer<{
-  addressChanged: (address: string) => void;
+  addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
   private metaMaskSdk: MetaMaskSDK | undefined;
   private eip1193Provider: Eip1193Provider | undefined;
@@ -15,7 +15,10 @@ class MetaMaskConnector extends EventContainer<{
   public init(options: WalletConnectorOptions) {
     if (window.ethereum) {
       const accountsChanged: any = ([address]: string[]) => {
-        this.emit("addressChanged", ethers.getAddress(address));
+        this.emit(
+          "addressChanged",
+          address ? ethers.getAddress(address) : undefined,
+        );
       };
       window.ethereum.on("accountsChanged", accountsChanged);
     } else {

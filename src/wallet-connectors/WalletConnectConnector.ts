@@ -12,7 +12,7 @@ export interface WalletConnectConnectorOptions extends WalletConnectorOptions {
 }
 
 class WalletConnectConnector extends EventContainer<{
-  addressChanged: (address: string) => void;
+  addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
   private _web3Modal: Web3Modal | undefined;
 
@@ -59,8 +59,11 @@ class WalletConnectConnector extends EventContainer<{
         this.rejectConnection = undefined;
         this.resolveConnection = undefined;
       }
-      if (newState.address && cachedAddress !== newState.address) {
-        this.emit("addressChanged", ethers.getAddress(newState.address));
+      if (cachedAddress !== newState.address) {
+        this.emit(
+          "addressChanged",
+          newState.address ? ethers.getAddress(newState.address) : undefined,
+        );
         cachedAddress = newState.address;
       }
     });

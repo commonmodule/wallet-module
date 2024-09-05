@@ -2,7 +2,7 @@ import { EventContainer } from "@common-module/ts";
 import { BrowserProvider } from "ethers";
 import WalletConnector, { ChainInfo, WalletConnectorOptions } from "./WalletConnector.js";
 declare class MetaMaskConnector extends EventContainer<{
-    addressChanged: (address: string) => void;
+    addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
     private metaMaskSdk;
     private eip1193Provider;
