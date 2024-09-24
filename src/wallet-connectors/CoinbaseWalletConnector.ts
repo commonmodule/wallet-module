@@ -1,10 +1,10 @@
 import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
-import { StringUtil } from "@common-module/ts";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
 } from "./WalletConnector.js";
+import { StringUtils } from "@common-module/ts";
 
 class CoinbaseWalletConnector implements WalletConnector {
   private _eip1193Provider: Eip1193Provider | undefined;
@@ -33,7 +33,7 @@ class CoinbaseWalletConnector implements WalletConnector {
       method: "wallet_addEthereumChain",
       params: [{
         chainId: ethers.toBeHex(chain.id).replace(/^0x0+/, "0x"),
-        chainName: StringUtil.capitalize(chain.name),
+        chainName: StringUtils.capitalize(chain.name),
         blockExplorerUrls: [chain.explorerUrl],
         nativeCurrency: { symbol: chain.symbol, decimals: 18 },
         rpcUrls: [chain.rpc],

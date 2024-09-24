@@ -65,7 +65,7 @@ export default class WalletConnectionPopup extends Modal {
 
   private async connect(walletId: string) {
     // Temporarily close the popup while the wallet connection process is underway.
-    this.offDom("close", this.closeListener).element.close();
+    this.offDom("close", this.closeListener).htmlElement.close();
     try {
       const walletAddress = await UniversalWalletConnector.connectAndGetAddress(
         walletId,
@@ -74,7 +74,7 @@ export default class WalletConnectionPopup extends Modal {
       this.remove();
     } catch (error) {
       console.error(error);
-      this.onDom("close", this.closeListener).element.showModal();
+      this.onDom("close", this.closeListener).htmlElement.showModal();
     }
   }
 

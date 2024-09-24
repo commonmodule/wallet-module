@@ -1,4 +1,4 @@
-import { EventContainer, StringUtil } from "@common-module/ts";
+import { EventContainer, StringUtils } from "@common-module/ts";
 import { MetaMaskSDK } from "@metamask/sdk";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
 import WalletConnector, {
@@ -51,7 +51,7 @@ class MetaMaskConnector extends EventContainer<{
   public async addChain(chain: ChainInfo) {
     const param = {
       chainId: ethers.toBeHex(chain.id).replace(/^0x0+/, "0x"),
-      chainName: StringUtil.capitalize(chain.name),
+      chainName: StringUtils.capitalize(chain.name),
       blockExplorerUrls: [chain.explorerUrl],
       nativeCurrency: { symbol: chain.symbol, decimals: 18 },
       rpcUrls: [chain.rpc],
