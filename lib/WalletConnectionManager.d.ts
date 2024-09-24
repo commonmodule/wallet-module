@@ -5,7 +5,7 @@ declare class WalletConnectionManager extends EventContainer<{
     private store;
     get connectedWallet(): string | undefined;
     get connectedAddress(): string | undefined;
-    get connected(): boolean;
+    get isConnected(): boolean;
     connect(): Promise<void>;
     disconnect(): Promise<void>;
     addChain(chainName: string): Promise<void>;

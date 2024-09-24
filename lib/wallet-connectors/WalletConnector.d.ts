@@ -9,9 +9,7 @@ export interface ChainInfo {
 export interface WalletConnectorOptions {
     name: string;
     icon: string;
-    chains: {
-        [name: string]: ChainInfo;
-    };
+    chains: Record<string, ChainInfo>;
 }
 export default interface WalletConnector {
     init(options: WalletConnectorOptions): void;

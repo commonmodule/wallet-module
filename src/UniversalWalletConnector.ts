@@ -30,9 +30,9 @@ class UniversalWalletConnector {
   public async connectAndGetProvider(
     walletId: string,
   ): Promise<BrowserProvider> {
-    const walletConnector = this.walletConnectors[walletId];
-    if (!walletConnector) throw new Error(`Unsupported walletId: ${walletId}`);
-    return await walletConnector.connect();
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
+    return await connector.connect();
   }
 
   public async connectAndGetAddress(walletId: string): Promise<string> {
@@ -42,14 +42,24 @@ class UniversalWalletConnector {
     return accounts[0].address;
   }
 
+  public async connectAndSignMessage(
+    walletId: string,
+    message: string,
+  ): Promise<string> {
+    const provider = await this.connectAndGetProvider(walletId);
+    return await (await provider.getSigner()).signMessage(message);
+  }
+
   public async addChain(walletId: string, chainName: string): Promise<void> {
+    if (!this.options) throw new Error("Options not initialized");
+
     const chainInfo = this.options?.chains[chainName];
     if (!chainInfo) throw new Error(`Chain ${chainName} not found`);
 
-    const walletConnector = this.walletConnectors[walletId];
-    if (!walletConnector) throw new Error(`Unsupported walletId: ${walletId}`);
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
 
-    await walletConnector.addChain(chainInfo);
+    await connector.addChain(chainInfo);
   }
 }
 

@@ -3,10 +3,10 @@ import { Button, ButtonType, Modal } from "@common-module/app-components";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
 export default class WalletConnectionPopup extends Modal {
-  private resolve:
+  private resolveConnect:
     | ((result: { walletId: string; walletAddress: string }) => void)
     | undefined;
-  private reject: ((reason: Error) => void) | undefined;
+  private rejectConnect: ((reason: Error) => void) | undefined;
 
   constructor() {
     super(".wallet-connection-popup");
@@ -22,7 +22,7 @@ export default class WalletConnectionPopup extends Modal {
             type: ButtonType.Contained,
             icon: el("img", { src: "/images/wallet-icons/walletconnect.svg" }),
             title: "Connect with WalletConnect",
-            onClick: async () => await this.connect("walletconnect"),
+            onClick: () => this.handleConnect("walletconnect"),
           }),
         ),
         el(
@@ -36,7 +36,7 @@ export default class WalletConnectionPopup extends Modal {
             type: ButtonType.Contained,
             icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
             title: "Connect with MetaMask",
-            onClick: async () => await this.connect("metamask"),
+            onClick: () => this.handleConnect("metamask"),
           }),
           new Button({
             type: ButtonType.Contained,
@@ -44,7 +44,7 @@ export default class WalletConnectionPopup extends Modal {
               src: "/images/wallet-icons/coinbase-wallet.svg",
             }),
             title: "Connect with Coinbase Wallet",
-            onClick: async () => await this.connect("coinbase-wallet"),
+            onClick: () => this.handleConnect("coinbase-wallet"),
           }),
         ),
       ),
@@ -59,29 +59,33 @@ export default class WalletConnectionPopup extends Modal {
 
     this.on(
       "remove",
-      () => this.reject?.(new Error("Connection canceled by user")),
+      () => this.rejectConnect?.(new Error("Connection canceled by user")),
     );
   }
 
-  private async connect(walletId: string) {
+  private async handleConnect(walletId: string) {
     // Temporarily close the popup while the wallet connection process is underway.
     this.offDom("close", this.closeListener).htmlElement.close();
+
     try {
       const walletAddress = await UniversalWalletConnector.connectAndGetAddress(
         walletId,
       );
-      this.resolve?.({ walletId, walletAddress });
+      this.resolveConnect?.({ walletId, walletAddress });
       this.remove();
     } catch (error) {
       console.error(error);
+
       this.onDom("close", this.closeListener).htmlElement.showModal();
     }
   }
 
-  public async wait(): Promise<{ walletId: string; walletAddress: string }> {
+  public async waitForConnection(): Promise<
+    { walletId: string; walletAddress: string }
+  > {
     return new Promise((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
+      this.resolveConnect = resolve;
+      this.rejectConnect = reject;
     });
   }
 }

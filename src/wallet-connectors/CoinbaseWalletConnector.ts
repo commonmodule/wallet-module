@@ -1,10 +1,10 @@
 import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
+import { StringUtils } from "@common-module/ts";
 import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
 } from "./WalletConnector.js";
-import { StringUtils } from "@common-module/ts";
 
 class CoinbaseWalletConnector implements WalletConnector {
   private _eip1193Provider: Eip1193Provider | undefined;

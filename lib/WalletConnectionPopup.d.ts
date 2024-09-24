@@ -1,10 +1,10 @@
 import { Modal } from "@common-module/app-components";
 export default class WalletConnectionPopup extends Modal {
-    private resolve;
-    private reject;
+    private resolveConnect;
+    private rejectConnect;
     constructor();
-    private connect;
-    wait(): Promise<{
+    private handleConnect;
+    waitForConnection(): Promise<{
         walletId: string;
         walletAddress: string;
     }>;

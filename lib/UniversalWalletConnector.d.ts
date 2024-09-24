@@ -9,6 +9,7 @@ declare class UniversalWalletConnector {
     init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
     connectAndGetProvider(walletId: string): Promise<BrowserProvider>;
     connectAndGetAddress(walletId: string): Promise<string>;
+    connectAndSignMessage(walletId: string, message: string): Promise<string>;
     addChain(walletId: string, chainName: string): Promise<void>;
 }
 declare const _default: UniversalWalletConnector;
