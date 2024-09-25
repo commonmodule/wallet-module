@@ -1,5 +1,5 @@
-import { Modal } from "@common-module/app-components";
-export default class WalletConnectionPopup extends Modal {
+import { StructuredModal } from "@common-module/app-components";
+export default class WalletConnectionPopup extends StructuredModal {
     private resolveConnect;
     private rejectConnect;
     constructor();

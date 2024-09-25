@@ -1,8 +1,12 @@
 import { el } from "@common-module/app";
-import { Button, ButtonType, Modal } from "@common-module/app-components";
+import {
+  Button,
+  ButtonType,
+  StructuredModal,
+} from "@common-module/app-components";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
-export default class WalletConnectionPopup extends Modal {
+export default class WalletConnectionPopup extends StructuredModal {
   private resolveConnect:
     | ((result: { walletId: string; walletAddress: string }) => void)
     | undefined;
@@ -10,11 +14,9 @@ export default class WalletConnectionPopup extends Modal {
 
   constructor() {
     super(".wallet-connection-popup");
-
-    this.append(
-      el("header", el("h1", "Connect Your Crypto Wallet")),
-      el(
-        "main",
+    this
+      .appendToHeader(el("h1", "Connect Your Crypto Wallet"))
+      .appendToMain(
         el(
           "section",
           el("h2", "WalletConnect - Recommended"),
@@ -47,20 +49,17 @@ export default class WalletConnectionPopup extends Modal {
             onClick: () => this.handleConnect("coinbase-wallet"),
           }),
         ),
-      ),
-      el(
-        "footer",
+      )
+      .appendToFooter(
         new Button(".cancel", {
           title: "Cancel",
           onClick: () => this.remove(),
         }),
-      ),
-    );
-
-    this.on(
-      "remove",
-      () => this.rejectConnect?.(new Error("Connection canceled by user")),
-    );
+      )
+      .on(
+        "remove",
+        () => this.rejectConnect?.(new Error("Connection canceled by user")),
+      );
   }
 
   private async handleConnect(walletId: string) {
