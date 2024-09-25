@@ -13,6 +13,7 @@ export interface WalletConnectorOptions {
 }
 export default interface WalletConnector {
     init(options: WalletConnectorOptions): void;
+    checkDisplayMode(): "modal" | "extension";
     connect(): Promise<BrowserProvider>;
     addChain(chain: ChainInfo): Promise<void>;
 }

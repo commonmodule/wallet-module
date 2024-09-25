@@ -23,6 +23,10 @@ class CoinbaseWalletConnector implements WalletConnector {
     }).makeWeb3Provider();
   }
 
+  public checkDisplayMode(): "modal" | "extension" {
+    return "modal";
+  }
+
   public async connect() {
     await this.eip1193Provider.request({ method: "eth_requestAccounts" });
     return new BrowserProvider(this.eip1193Provider);

@@ -13,6 +13,7 @@ declare class WalletConnectConnector extends EventContainer<{
     private resolveConnection;
     private rejectConnection;
     init(options: WalletConnectConnectorOptions): void;
+    checkDisplayMode(): "modal" | "extension";
     connect(): Promise<BrowserProvider>;
     addChain(chain: ChainInfo): Promise<void>;
 }

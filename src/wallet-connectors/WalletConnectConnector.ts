@@ -69,6 +69,10 @@ class WalletConnectConnector extends EventContainer<{
     });
   }
 
+  public checkDisplayMode(): "modal" | "extension" {
+    return "modal";
+  }
+
   public async connect() {
     const walletAddress = this.web3Modal.getAddress();
     if (walletAddress !== undefined) {

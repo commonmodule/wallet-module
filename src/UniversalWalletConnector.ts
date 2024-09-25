@@ -27,6 +27,12 @@ class UniversalWalletConnector {
     }
   }
 
+  public checkDisplayMode(walletId: string): "modal" | "extension" {
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
+    return connector.checkDisplayMode();
+  }
+
   public async connectAndGetProvider(
     walletId: string,
   ): Promise<BrowserProvider> {

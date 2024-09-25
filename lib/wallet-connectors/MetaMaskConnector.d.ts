@@ -7,6 +7,7 @@ declare class MetaMaskConnector extends EventContainer<{
     private metaMaskSdk;
     private eip1193Provider;
     init(options: WalletConnectorOptions): void;
+    checkDisplayMode(): "modal" | "extension";
     connect(): Promise<BrowserProvider>;
     addChain(chain: ChainInfo): Promise<void>;
 }
