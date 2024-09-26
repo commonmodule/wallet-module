@@ -1,4 +1,4 @@
-import WalletPopupBase from "./WalletPopupBase.js";
+import WalletPopupBase from "../WalletPopupBase.js";
 export default class WalletConnectionPopup extends WalletPopupBase {
     private resolveConnect;
     private rejectConnect;

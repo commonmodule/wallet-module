@@ -1,12 +1,9 @@
 import { el } from "@common-module/app";
-import {
-  Button,
-  ButtonType,
-  StructuredModal,
-} from "@common-module/app-components";
-import UniversalWalletConnector from "./UniversalWalletConnector.js";
+import { Button, ButtonGroup, ButtonType } from "@common-module/app-components";
+import UniversalWalletConnector from "../UniversalWalletConnector.js";
+import WalletPopupBase from "../WalletPopupBase.js";
 
-export default class WalletConnectionPopup extends StructuredModal {
+export default class WalletConnectionPopup extends WalletPopupBase {
   private resolveConnect:
     | ((result: { walletId: string; walletAddress: string }) => void)
     | undefined;
@@ -20,12 +17,16 @@ export default class WalletConnectionPopup extends StructuredModal {
         el(
           "section",
           el("h2", "WalletConnect - Recommended"),
-          new Button({
-            type: ButtonType.Contained,
-            icon: el("img", { src: "/images/wallet-icons/walletconnect.svg" }),
-            title: "Connect with WalletConnect",
-            onClick: () => this.handleConnect("walletconnect"),
-          }),
+          new ButtonGroup(
+            new Button({
+              type: ButtonType.Outlined,
+              icon: el("img", {
+                src: "/images/wallet-icons/walletconnect.svg",
+              }),
+              title: "Connect with WalletConnect",
+              onClick: () => this.handleConnect("walletconnect"),
+            }),
+          ),
         ),
         el(
           "section",
@@ -34,20 +35,22 @@ export default class WalletConnectionPopup extends StructuredModal {
             "p",
             "These options are available when WalletConnect is not working properly. Direct connection requires re-authentication each time you start the app, which may be less convenient compared to WalletConnect.",
           ),
-          new Button({
-            type: ButtonType.Contained,
-            icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
-            title: "Connect with MetaMask",
-            onClick: () => this.handleConnect("metamask"),
-          }),
-          new Button({
-            type: ButtonType.Contained,
-            icon: el("img", {
-              src: "/images/wallet-icons/coinbase-wallet.svg",
+          new ButtonGroup(
+            new Button({
+              type: ButtonType.Outlined,
+              icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
+              title: "Connect with MetaMask",
+              onClick: () => this.handleConnect("metamask"),
             }),
-            title: "Connect with Coinbase Wallet",
-            onClick: () => this.handleConnect("coinbase-wallet"),
-          }),
+            new Button({
+              type: ButtonType.Outlined,
+              icon: el("img", {
+                src: "/images/wallet-icons/coinbase-wallet.svg",
+              }),
+              title: "Connect with Coinbase Wallet",
+              onClick: () => this.handleConnect("coinbase-wallet"),
+            }),
+          ),
         ),
       )
       .appendToFooter(
@@ -63,10 +66,7 @@ export default class WalletConnectionPopup extends StructuredModal {
   }
 
   private async handleConnect(walletId: string) {
-    // Temporarily close the popup while the wallet connection process is underway.
-    if (UniversalWalletConnector.checkDisplayMode(walletId) === "modal") {
-      this.offDom("close", this.closeListener).htmlElement.close();
-    }
+    this.temporarilyCloseModal(walletId);
 
     try {
       const walletAddress = await UniversalWalletConnector.connectAndGetAddress(
@@ -77,9 +77,7 @@ export default class WalletConnectionPopup extends StructuredModal {
     } catch (error) {
       console.error(error);
 
-      if (UniversalWalletConnector.checkDisplayMode(walletId) === "modal") {
-        this.onDom("close", this.closeListener).htmlElement.showModal();
-      }
+      this.restoreModal(walletId);
     }
   }
 

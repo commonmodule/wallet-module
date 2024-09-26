@@ -1,7 +1,7 @@
 import { Store } from "@common-module/app";
 import { EventContainer } from "@common-module/ts";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
-import WalletConnectionPopup from "./WalletConnectionPopup.js";
+import WalletConnectionPopup from "./components/WalletConnectionPopup.js";
 
 class WalletConnectionManager extends EventContainer<{
   connectionChanged: () => void;
