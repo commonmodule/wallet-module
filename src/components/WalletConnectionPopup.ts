@@ -71,9 +71,11 @@ export default class WalletConnectionPopup extends WalletPopupBase {
     try {
       await UniversalWalletConnector.disconnect(walletId);
 
-      const walletAddress = await UniversalWalletConnector.connectAndGetAddress(
-        walletId,
-      );
+      const provider = await UniversalWalletConnector.connect(walletId);
+      const accounts = await provider.listAccounts();
+      if (accounts.length === 0) throw new Error("No accounts found");
+      const walletAddress = accounts[0].address;
+
       this.resolveConnect?.({ walletId, walletAddress });
       this.remove();
     } catch (error) {

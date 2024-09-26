@@ -8,9 +8,7 @@ declare class UniversalWalletConnector {
     private options;
     init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
     checkDisplayMode(walletId: string): "modal" | "extension";
-    connectAndGetProvider(walletId: string): Promise<BrowserProvider>;
-    connectAndGetAddress(walletId: string): Promise<string>;
-    connectAndSignMessage(walletId: string, message: string): Promise<string>;
+    connect(walletId: string): Promise<BrowserProvider>;
     disconnect(walletId: string): Promise<void>;
     addChain(walletId: string, chainName: string): Promise<void>;
 }
