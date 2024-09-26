@@ -56,6 +56,12 @@ class UniversalWalletConnector {
     return await (await provider.getSigner()).signMessage(message);
   }
 
+  public async disconnect(walletId: string): Promise<void> {
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
+    await connector.disconnect();
+  }
+
   public async addChain(walletId: string, chainName: string): Promise<void> {
     if (!this.options) throw new Error("Options not initialized");
 

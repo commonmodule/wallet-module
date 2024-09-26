@@ -52,6 +52,10 @@ class MetaMaskConnector extends EventContainer<{
     }
   }
 
+  public async disconnect() {
+    await this.metaMaskSdk?.disconnect();
+  }
+
   public async addChain(chain: ChainInfo) {
     const provider = window.ethereum || this.eip1193Provider;
     if (!provider) throw new Error("No EIP-1193 provider");

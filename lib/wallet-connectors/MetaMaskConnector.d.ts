@@ -9,6 +9,7 @@ declare class MetaMaskConnector extends EventContainer<{
     init(options: WalletConnectorOptions): void;
     checkDisplayMode(): "modal" | "extension";
     connect(): Promise<BrowserProvider>;
+    disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
 }
 declare const _default: MetaMaskConnector;

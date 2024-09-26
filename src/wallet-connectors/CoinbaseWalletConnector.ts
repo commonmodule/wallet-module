@@ -32,6 +32,8 @@ class CoinbaseWalletConnector implements WalletConnector {
     return new BrowserProvider(this.eip1193Provider);
   }
 
+  public async disconnect() {}
+
   public async addChain(chain: ChainInfo) {
     await this.eip1193Provider.request({
       method: "wallet_addEthereumChain",

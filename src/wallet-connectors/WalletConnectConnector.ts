@@ -89,6 +89,10 @@ class WalletConnectConnector extends EventContainer<{
     return new BrowserProvider(walletProvider);
   }
 
+  public async disconnect() {
+    await this._web3Modal?.disconnect();
+  }
+
   public async addChain(chain: ChainInfo) {
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");

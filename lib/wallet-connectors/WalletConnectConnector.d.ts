@@ -15,6 +15,7 @@ declare class WalletConnectConnector extends EventContainer<{
     init(options: WalletConnectConnectorOptions): void;
     checkDisplayMode(): "modal" | "extension";
     connect(): Promise<BrowserProvider>;
+    disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
 }
 declare const _default: WalletConnectConnector;
