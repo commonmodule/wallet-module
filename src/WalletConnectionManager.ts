@@ -23,8 +23,8 @@ class WalletConnectionManager extends EventContainer<{
   public async connect() {
     const { walletId, walletAddress } = await new WalletConnectionPopup()
       .waitForConnection();
-    this.store.set("connectedWallet", walletId);
-    this.store.set("connectedAddress", walletAddress);
+    this.store.setPermanent("connectedWallet", walletId);
+    this.store.setPermanent("connectedAddress", walletAddress);
     this.emit("connectionChanged");
   }
 
