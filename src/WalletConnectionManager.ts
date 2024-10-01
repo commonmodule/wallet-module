@@ -1,7 +1,6 @@
 import { Store } from "@common-module/app";
 import { EventContainer } from "@common-module/ts";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
-import WalletConnectionPopup from "./components/WalletConnectionPopup.js";
 
 class WalletConnectionManager extends EventContainer<{
   connectionChanged: () => void;
@@ -20,9 +19,7 @@ class WalletConnectionManager extends EventContainer<{
     return !!this.connectedWallet && !!this.connectedAddress;
   }
 
-  public async connect() {
-    const { walletId, walletAddress } = await new WalletConnectionPopup()
-      .waitForConnection();
+  public addConnectionInfo(walletId: string, walletAddress: string) {
     this.store.setPermanent("connectedWallet", walletId);
     this.store.setPermanent("connectedAddress", walletAddress);
     this.emit("connectionChanged");
@@ -35,7 +32,6 @@ class WalletConnectionManager extends EventContainer<{
   }
 
   public async addChain(chainName: string): Promise<void> {
-    if (!this.connectedWallet) await this.connect();
     if (!this.connectedWallet) throw new Error("Not connected");
     await UniversalWalletConnector.addChain(this.connectedWallet, chainName);
   }

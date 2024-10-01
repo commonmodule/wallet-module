@@ -3,10 +3,6 @@ export default class WalletConnectionPopup extends WalletPopupBase {
     private resolveConnect;
     private rejectConnect;
     constructor();
-    private handleConnect;
-    waitForConnection(): Promise<{
-        walletId: string;
-        walletAddress: string;
-    }>;
+    waitForConnection(): Promise<void>;
 }
 //# sourceMappingURL=WalletConnectionPopup.d.ts.map

@@ -1,12 +1,10 @@
 import { el } from "@common-module/app";
-import { Button, ButtonGroup, ButtonType } from "@common-module/app-components";
-import UniversalWalletConnector from "../UniversalWalletConnector.js";
+import { Button } from "@common-module/app-components";
 import WalletPopupBase from "../WalletPopupBase.js";
+import WalletConnectionContent from "./WalletConnectionContent.js";
 
 export default class WalletConnectionPopup extends WalletPopupBase {
-  private resolveConnect:
-    | ((result: { walletId: string; walletAddress: string }) => void)
-    | undefined;
+  private resolveConnect: (() => void) | undefined;
   private rejectConnect: ((reason: Error) => void) | undefined;
 
   constructor() {
@@ -14,43 +12,16 @@ export default class WalletConnectionPopup extends WalletPopupBase {
     this
       .appendToHeader(el("h1", "Connect Your Crypto Wallet"))
       .appendToMain(
-        el(
-          "section",
-          el("h2", "WalletConnect - Recommended"),
-          new ButtonGroup(
-            new Button({
-              type: ButtonType.Outlined,
-              icon: el("img", {
-                src: "/images/wallet-icons/walletconnect.svg",
-              }),
-              title: "Connect with WalletConnect",
-              onClick: () => this.handleConnect("walletconnect"),
-            }),
-          ),
-        ),
-        el(
-          "section",
-          el("h2", "Direct Connection"),
-          el(
-            "p",
-            "These options are available when WalletConnect is not working properly. Direct connection requires re-authentication each time you start the app, which may be less convenient compared to WalletConnect.",
-          ),
-          new ButtonGroup(
-            new Button({
-              type: ButtonType.Outlined,
-              icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
-              title: "Connect with MetaMask",
-              onClick: () => this.handleConnect("metamask"),
-            }),
-            new Button({
-              type: ButtonType.Outlined,
-              icon: el("img", {
-                src: "/images/wallet-icons/coinbase-wallet.svg",
-              }),
-              title: "Connect with Coinbase Wallet",
-              onClick: () => this.handleConnect("coinbase-wallet"),
-            }),
-          ),
+        new WalletConnectionContent(
+          () => {
+            this.resolveConnect?.();
+            this.remove();
+          },
+          (error) => {
+            console.error(error);
+            this.restoreModal(error.message);
+          },
+          (walletId) => this.temporarilyCloseModal(walletId),
         ),
       )
       .appendToFooter(
@@ -65,29 +36,7 @@ export default class WalletConnectionPopup extends WalletPopupBase {
       );
   }
 
-  private async handleConnect(walletId: string) {
-    this.temporarilyCloseModal(walletId);
-
-    try {
-      await UniversalWalletConnector.disconnect(walletId);
-
-      const provider = await UniversalWalletConnector.connect(walletId);
-      const accounts = await provider.listAccounts();
-      if (accounts.length === 0) throw new Error("No accounts found");
-      const walletAddress = accounts[0].address;
-
-      this.resolveConnect?.({ walletId, walletAddress });
-      this.remove();
-    } catch (error) {
-      console.error(error);
-
-      this.restoreModal(walletId);
-    }
-  }
-
-  public async waitForConnection(): Promise<
-    { walletId: string; walletAddress: string }
-  > {
+  public async waitForConnection(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resolveConnect = resolve;
       this.rejectConnect = reject;
