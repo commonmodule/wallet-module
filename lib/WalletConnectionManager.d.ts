@@ -1,4 +1,5 @@
 import { EventContainer } from "@common-module/ts";
+import { JsonRpcSigner } from "ethers";
 declare class WalletConnectionManager extends EventContainer<{
     connectionChanged: () => void;
 }> {
@@ -8,6 +9,7 @@ declare class WalletConnectionManager extends EventContainer<{
     get isConnected(): boolean;
     addConnectionInfo(walletId: string, walletAddress: string): void;
     disconnect(): Promise<void>;
+    getSigner(): Promise<JsonRpcSigner>;
 }
 declare const _default: WalletConnectionManager;
 export default _default;

@@ -1,5 +1,7 @@
 import { Store } from "@common-module/app";
 import { EventContainer } from "@common-module/ts";
+import { JsonRpcSigner } from "ethers";
+import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
 class WalletConnectionManager extends EventContainer<{
   connectionChanged: () => void;
@@ -28,6 +30,24 @@ class WalletConnectionManager extends EventContainer<{
     this.store.remove("connectedWallet");
     this.store.remove("connectedAddress");
     this.emit("connectionChanged");
+  }
+
+  public async getSigner(): Promise<JsonRpcSigner> {
+    if (!this.isConnected) throw new Error("Not connected");
+
+    const provider = await UniversalWalletConnector.connect(
+      this.connectedWallet!,
+    );
+
+    const accounts = await provider.listAccounts();
+    if (accounts.length === 0) throw new Error("No accounts found");
+    const walletAddress = accounts[0].address;
+
+    if (!this.connectedAddress || walletAddress !== this.connectedAddress) {
+      throw new Error("Connected wallet address does not match");
+    }
+
+    return await provider.getSigner();
   }
 }
 
