@@ -1,6 +1,5 @@
 import { Store } from "@common-module/app";
 import { EventContainer } from "@common-module/ts";
-import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
 class WalletConnectionManager extends EventContainer<{
   connectionChanged: () => void;
@@ -29,11 +28,6 @@ class WalletConnectionManager extends EventContainer<{
     this.store.remove("connectedWallet");
     this.store.remove("connectedAddress");
     this.emit("connectionChanged");
-  }
-
-  public async addChain(chainName: string): Promise<void> {
-    if (!this.connectedWallet) throw new Error("Not connected");
-    await UniversalWalletConnector.addChain(this.connectedWallet, chainName);
   }
 }
 

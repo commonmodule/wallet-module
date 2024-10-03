@@ -8,7 +8,6 @@ declare class WalletConnectionManager extends EventContainer<{
     get isConnected(): boolean;
     addConnectionInfo(walletId: string, walletAddress: string): void;
     disconnect(): Promise<void>;
-    addChain(chainName: string): Promise<void>;
 }
 declare const _default: WalletConnectionManager;
 export default _default;
