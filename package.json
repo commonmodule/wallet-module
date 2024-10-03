@@ -10,7 +10,7 @@
     "@coinbase/wallet-sdk": "^4.0.4",
     "@common-module/app-components": "^0.1.0",
     "@common-module/material-icons": "^0.1.1",
-    "@metamask/sdk": "^0.26.5",
+    "@metamask/sdk": "^0.28.4",
     "@web3modal/ethers": "^5.0.7",
     "ethers": "^6.13.2"
   },

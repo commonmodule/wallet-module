@@ -1,6 +1,6 @@
 import { EventContainer, StringUtils } from "@common-module/ts";
 import { MetaMaskSDK } from "@metamask/sdk";
-import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
+import { BrowserProvider, Eip1193Provider, getAddress, toBeHex } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
@@ -17,7 +17,7 @@ class MetaMaskConnector extends EventContainer<{
       const accountsChanged: any = ([address]: string[]) => {
         this.emit(
           "addressChanged",
-          address ? ethers.getAddress(address) : undefined,
+          address ? getAddress(address) : undefined,
         );
       };
       window.ethereum.on("accountsChanged", accountsChanged);
@@ -62,7 +62,7 @@ class MetaMaskConnector extends EventContainer<{
     await provider.request({
       method: "wallet_addEthereumChain",
       params: [{
-        chainId: ethers.toBeHex(chain.id).replace(/^0x0+/, "0x"),
+        chainId: toBeHex(chain.id).replace(/^0x0+/, "0x"),
         chainName: StringUtils.capitalize(chain.name),
         blockExplorerUrls: [chain.explorerUrl],
         nativeCurrency: { symbol: chain.symbol, decimals: 18 },

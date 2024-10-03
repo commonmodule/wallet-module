@@ -1,6 +1,6 @@
 import { EventContainer } from "@common-module/ts";
 import { createWeb3Modal, defaultConfig, Web3Modal } from "@web3modal/ethers";
-import { BrowserProvider, ethers } from "ethers";
+import { BrowserProvider, getAddress, toBeHex } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
@@ -62,7 +62,7 @@ class WalletConnectConnector extends EventContainer<{
       if (cachedAddress !== newState.address) {
         this.emit(
           "addressChanged",
-          newState.address ? ethers.getAddress(newState.address) : undefined,
+          newState.address ? getAddress(newState.address) : undefined,
         );
         cachedAddress = newState.address;
       }
@@ -76,7 +76,7 @@ class WalletConnectConnector extends EventContainer<{
   public async connect() {
     const walletAddress = this.web3Modal.getAddress();
     if (walletAddress !== undefined) {
-      this.emit("addressChanged", ethers.getAddress(walletAddress));
+      this.emit("addressChanged", getAddress(walletAddress));
     } else {
       await new Promise<void>((resolve, reject) => {
         this.resolveConnection = resolve;
@@ -100,7 +100,7 @@ class WalletConnectConnector extends EventContainer<{
       method: "wallet_addEthereumChain",
       params: [
         {
-          chainId: ethers.toBeHex(chain.id).replace(/^0x0+/, "0x"),
+          chainId: toBeHex(chain.id).replace(/^0x0+/, "0x"),
           chainName: chain.name,
           blockExplorerUrls: [chain.explorerUrl],
           nativeCurrency: { symbol: chain.symbol, decimals: 18 },
