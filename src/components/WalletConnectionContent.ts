@@ -56,6 +56,7 @@ export default class WalletConnectionContent extends DomNode {
     try {
       if (this.onBeforeConnect) this.onBeforeConnect(walletId);
 
+      WalletConnectionManager.disconnect();
       await UniversalWalletConnector.disconnect(walletId);
 
       const provider = await UniversalWalletConnector.connect(walletId);
