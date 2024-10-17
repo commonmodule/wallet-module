@@ -10,11 +10,16 @@ export default class WalletConnectionPopup extends WalletPopupBase {
   constructor() {
     super(".wallet-connection-popup");
     this
+      .on(
+        "remove",
+        () => this.rejectConnect?.(new Error("Connection canceled by user")),
+      )
       .appendToHeader(el("h1", "Connect Your Crypto Wallet"))
       .appendToMain(
         new WalletConnectionContent(
           () => {
             this.resolveConnect?.();
+            this.rejectConnect = undefined;
             this.remove();
           },
           (error) => {
@@ -29,10 +34,6 @@ export default class WalletConnectionPopup extends WalletPopupBase {
           title: "Cancel",
           onClick: () => this.remove(),
         }),
-      )
-      .on(
-        "remove",
-        () => this.rejectConnect?.(new Error("Connection canceled by user")),
       );
   }
 

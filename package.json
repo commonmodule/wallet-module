@@ -2,7 +2,7 @@
   "name": "@common-module/wallet",
   "author": "yj.gaia",
   "homepage": "https://yj.dev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
@@ -12,7 +12,7 @@
     "@common-module/material-icons": "^0.1.1",
     "@metamask/sdk": "^0.28.4",
     "@web3modal/ethers": "5.1.1",
-    "ethers": "^6.13.3"
+    "ethers": "^6.13.4"
   },
   "devDependencies": {
     "react": "^18.3.1"
