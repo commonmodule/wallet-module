@@ -2,6 +2,9 @@ import { DomNode, el } from "@common-module/app";
 import { Button, ButtonGroup, ButtonType } from "@common-module/app-components";
 import UniversalWalletConnector from "../UniversalWalletConnector.js";
 import WalletConnectionManager from "../WalletConnectionManager.js";
+import WalletConnectLogo from "./wallet-logos/WalletConnectLogo.js";
+import MetaMaskLogo from "./wallet-logos/MetaMaskLogo.js";
+import CoinbaseWalletLogo from "./wallet-logos/CoinbaseWalletLogo.js";
 
 export default class WalletConnectionContent extends DomNode {
   constructor(
@@ -17,9 +20,7 @@ export default class WalletConnectionContent extends DomNode {
         new ButtonGroup(
           new Button({
             type: ButtonType.Outlined,
-            icon: el("img", {
-              src: "/images/wallet-icons/walletconnect.svg",
-            }),
+            icon: new WalletConnectLogo(),
             title: "Connect with WalletConnect",
             onClick: () => this.handleConnect("walletconnect"),
           }),
@@ -35,15 +36,13 @@ export default class WalletConnectionContent extends DomNode {
         new ButtonGroup(
           new Button({
             type: ButtonType.Outlined,
-            icon: el("img", { src: "/images/wallet-icons/metamask.svg" }),
+            icon: new MetaMaskLogo(),
             title: "Connect with MetaMask",
             onClick: () => this.handleConnect("metamask"),
           }),
           new Button({
             type: ButtonType.Outlined,
-            icon: el("img", {
-              src: "/images/wallet-icons/coinbase-wallet.svg",
-            }),
+            icon: new CoinbaseWalletLogo(),
             title: "Connect with Coinbase Wallet",
             onClick: () => this.handleConnect("coinbase-wallet"),
           }),

@@ -1,4 +1,10 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+import { DomNode } from "@common-module/app";
+
+export default class CoinbaseWalletLogo extends DomNode {
+  constructor() {
+    super(".coinbase-wallet-logo");
+    this.htmlElement.innerHTML =
+      `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_13571_129878)">
 <rect width="40" height="40" fill="#0052FF"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M8.3312 0H31.6672C36.2704 0 40 4.0128 40 8.9632V31.0368C40 35.9872 36.2704 40 31.6688 40H8.3312C3.7296 40 0 35.9872 0 31.0368V8.9632C0 4.0128 3.7296 0 8.3312 0Z" fill="#0052FF"/>
@@ -10,4 +16,6 @@
 <rect width="40" height="40" fill="white"/>
 </clipPath>
 </defs>
-</svg>
+</svg>`;
+  }
+}
