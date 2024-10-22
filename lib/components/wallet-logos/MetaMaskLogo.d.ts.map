@@ -1,1 +1,1 @@
-{"version":3,"file":"MetaMaskLogo.d.ts","sourceRoot":"","sources":["../../../src/components/wallet-logos/MetaMaskLogo.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,oBAAoB,CAAC;AAE7C,MAAM,CAAC,OAAO,OAAO,YAAa,SAAQ,OAAO;;CAoBhD"}
+{"version":3,"file":"MetaMaskLogo.d.ts","sourceRoot":"","sources":["../../../src/components/wallet-logos/MetaMaskLogo.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,oBAAoB,CAAC;AAC7C,OAAO,EAAE,WAAW,EAAE,MAAM,+BAA+B,CAAC;AAE5D,MAAM,CAAC,OAAO,OAAO,YAAa,SAAQ,OAAO;gBACnC,QAAQ,EAAE,WAAW;CAmBlC"}

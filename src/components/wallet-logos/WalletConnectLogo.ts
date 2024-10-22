@@ -1,8 +1,9 @@
 import { DomNode } from "@common-module/app";
+import { DomSelector } from "@common-module/universal-page";
 
 export default class WalletConnectLogo extends DomNode {
-  constructor() {
-    super(".walletconnect-logo");
+  constructor(selector: DomSelector) {
+    super(`.walletconnect-logo${selector}`);
     this.htmlElement.innerHTML =
       `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="40" height="40" fill="#3396FF"/>

@@ -1,8 +1,9 @@
 import { DomNode } from "@common-module/app";
+import { DomSelector } from "@common-module/universal-page";
 
 export default class MetaMaskLogo extends DomNode {
-  constructor() {
-    super(".metamask-logo");
+  constructor(selector: DomSelector) {
+    super(`.metamask-logo${selector}`);
     this.htmlElement.innerHTML =
       `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="40" height="40" fill="#F7F9FB"/>

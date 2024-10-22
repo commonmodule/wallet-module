@@ -1,8 +1,9 @@
 import { DomNode } from "@common-module/app";
+import { DomSelector } from "@common-module/universal-page";
 
 export default class CoinbaseWalletLogo extends DomNode {
-  constructor() {
-    super(".coinbase-wallet-logo");
+  constructor(selector: DomSelector) {
+    super(`.coinbase-wallet-logo${selector}`);
     this.htmlElement.innerHTML =
       `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_13571_129878)">

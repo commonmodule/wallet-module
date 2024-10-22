@@ -20,7 +20,7 @@ export default class WalletConnectionContent extends DomNode {
         new ButtonGroup(
           new Button({
             type: ButtonType.Outlined,
-            icon: new WalletConnectLogo(),
+            icon: new WalletConnectLogo(".icon"),
             title: "Connect with WalletConnect",
             onClick: () => this.handleConnect("walletconnect"),
           }),
@@ -36,13 +36,13 @@ export default class WalletConnectionContent extends DomNode {
         new ButtonGroup(
           new Button({
             type: ButtonType.Outlined,
-            icon: new MetaMaskLogo(),
+            icon: new MetaMaskLogo(".icon"),
             title: "Connect with MetaMask",
             onClick: () => this.handleConnect("metamask"),
           }),
           new Button({
             type: ButtonType.Outlined,
-            icon: new CoinbaseWalletLogo(),
+            icon: new CoinbaseWalletLogo(".icon"),
             title: "Connect with Coinbase Wallet",
             onClick: () => this.handleConnect("coinbase-wallet"),
           }),
