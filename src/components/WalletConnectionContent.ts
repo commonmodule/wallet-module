@@ -63,6 +63,7 @@ export default class WalletConnectionContent extends DomNode {
       const walletAddress = accounts[0].address;
 
       WalletConnectionManager.addConnectionInfo(walletId, walletAddress);
+
       this.onConnected();
     } catch (error) {
       console.error(error);
