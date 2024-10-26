@@ -9,7 +9,6 @@
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.1.0",
     "@common-module/app-components": "^0.1.2",
-    "@common-module/material-icons": "^0.1.2",
     "@metamask/sdk": "^0.30.0",
     "@web3modal/ethers": "5.1.1",
     "ethers": "^6.13.4"
