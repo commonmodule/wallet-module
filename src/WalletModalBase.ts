@@ -1,7 +1,7 @@
 import { StructuredModal } from "@common-module/app-components";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
 
-export default abstract class WalletPopupBase extends StructuredModal {
+export default abstract class WalletModalBase extends StructuredModal {
   protected temporarilyCloseModal(walletId: string) {
     if (UniversalWalletConnector.checkDisplayMode(walletId) === "modal") {
       this.offDom("close", this.closeListener).htmlElement.close();

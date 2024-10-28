@@ -1,14 +1,14 @@
 import { el } from "@common-module/app";
 import { Button } from "@common-module/app-components";
-import WalletPopupBase from "../WalletPopupBase.js";
+import WalletModalBase from "../WalletModalBase.js";
 import WalletConnectionContent from "./WalletConnectionContent.js";
 
-export default class WalletConnectionPopup extends WalletPopupBase {
+export default class WalletConnectionModal extends WalletModalBase {
   private resolveConnect: (() => void) | undefined;
   private rejectConnect: ((reason: Error) => void) | undefined;
 
   constructor() {
-    super(".wallet-connection-popup");
+    super(".wallet-connection-modal");
     this
       .on(
         "remove",
