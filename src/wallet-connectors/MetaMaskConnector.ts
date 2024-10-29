@@ -53,7 +53,14 @@ class MetaMaskConnector extends EventContainer<{
   }
 
   public async disconnect() {
-    await this.metaMaskSdk?.disconnect();
+    if (window.ethereum) {
+      await window.ethereum.request({
+        method: "wallet_revokePermissions",
+        params: [{ eth_accounts: {} }],
+      });
+    } else {
+      await this.metaMaskSdk?.disconnect();
+    }
   }
 
   public async addChain(chain: ChainInfo) {
