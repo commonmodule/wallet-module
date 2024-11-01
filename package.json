@@ -2,13 +2,13 @@
   "name": "@common-module/wallet",
   "author": "yj.gaia",
   "homepage": "https://yj.dev",
-  "version": "0.1.2",
+  "version": "0.1.6",
   "type": "module",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
   "dependencies": {
+    "@common-module/app-components": "^0.1.6",
     "@coinbase/wallet-sdk": "^4.1.0",
-    "@common-module/app-components": "^0.1.2",
     "@metamask/sdk": "^0.30.0",
     "@web3modal/ethers": "5.1.1",
     "ethers": "^6.13.4"
