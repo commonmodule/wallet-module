@@ -6,6 +6,8 @@ import WalletConnector, {
   WalletConnectorOptions,
 } from "./WalletConnector.js";
 
+const windowEthereum = window.ethereum;
+
 class MetaMaskConnector extends EventContainer<{
   addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
@@ -13,14 +15,14 @@ class MetaMaskConnector extends EventContainer<{
   private eip1193Provider: Eip1193Provider | undefined;
 
   public init(options: WalletConnectorOptions) {
-    if (window.ethereum) {
+    if (windowEthereum) {
       const accountsChanged: any = ([address]: string[]) => {
         this.emit(
           "addressChanged",
           address ? getAddress(address) : undefined,
         );
       };
-      window.ethereum.on("accountsChanged", accountsChanged);
+      windowEthereum.on("accountsChanged", accountsChanged);
     } else {
       this.metaMaskSdk = new MetaMaskSDK({
         dappMetadata: {
@@ -33,13 +35,13 @@ class MetaMaskConnector extends EventContainer<{
   }
 
   public checkDisplayMode(): "modal" | "extension" {
-    return window.ethereum ? "extension" : "modal";
+    return windowEthereum ? "extension" : "modal";
   }
 
   public async connect() {
-    if (window.ethereum) {
-      await window.ethereum.request({ method: "eth_requestAccounts" });
-      return new BrowserProvider(window.ethereum);
+    if (windowEthereum) {
+      await windowEthereum.request({ method: "eth_requestAccounts" });
+      return new BrowserProvider(windowEthereum);
     } else {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
       await this.metaMaskSdk.connect();
@@ -53,8 +55,8 @@ class MetaMaskConnector extends EventContainer<{
   }
 
   public async disconnect() {
-    if (window.ethereum) {
-      await window.ethereum.request({
+    if (windowEthereum) {
+      await windowEthereum.request({
         method: "wallet_revokePermissions",
         params: [{ eth_accounts: {} }],
       });
@@ -64,7 +66,7 @@ class MetaMaskConnector extends EventContainer<{
   }
 
   public async addChain(chain: ChainInfo) {
-    const provider = window.ethereum || this.eip1193Provider;
+    const provider = windowEthereum || this.eip1193Provider;
     if (!provider) throw new Error("No EIP-1193 provider");
     await provider.request({
       method: "wallet_addEthereumChain",
