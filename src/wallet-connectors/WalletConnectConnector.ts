@@ -42,6 +42,9 @@ class WalletConnectConnector extends EventContainer<{
         rpcUrl: info.rpc,
         explorerUrl: info.explorerUrl,
       })),
+      themeVariables: {
+        "--w3m-z-index": 999999,
+      },
     });
 
     this._web3Modal.subscribeEvents((newEvent) => {
