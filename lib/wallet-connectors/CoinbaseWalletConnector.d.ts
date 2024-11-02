@@ -5,7 +5,10 @@ declare class CoinbaseWalletConnector implements WalletConnector {
     private get eip1193Provider();
     init(options: WalletConnectorOptions): void;
     checkDisplayMode(): "modal" | "extension";
-    connect(): Promise<BrowserProvider>;
+    connect(): Promise<{
+        provider: BrowserProvider;
+        walletAddress: string | undefined;
+    }>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
 }

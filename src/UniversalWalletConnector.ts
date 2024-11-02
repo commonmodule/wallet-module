@@ -33,7 +33,9 @@ class UniversalWalletConnector {
     return connector.checkDisplayMode();
   }
 
-  public async connect(walletId: string): Promise<BrowserProvider> {
+  public async connect(
+    walletId: string,
+  ): Promise<{ provider: BrowserProvider; walletAddress?: string }> {
     const connector = this.walletConnectors[walletId];
     if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
     return await connector.connect();

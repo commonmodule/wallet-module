@@ -35,19 +35,16 @@ class WalletConnectionManager extends EventContainer<{
   public async getSigner(): Promise<JsonRpcSigner> {
     if (!this.isConnected) throw new Error("Not connected");
 
-    const provider = await UniversalWalletConnector.connect(
+    const { provider, walletAddress } = await UniversalWalletConnector.connect(
       this.connectedWallet!,
     );
 
-    const accounts = await provider.listAccounts();
-    if (accounts.length === 0) throw new Error("No accounts found");
-    const walletAddress = accounts[0].address;
-
+    if (walletAddress === undefined) throw new Error("No accounts found");
     if (!this.connectedAddress || walletAddress !== this.connectedAddress) {
       throw new Error("Connected wallet address does not match");
     }
 
-    return await provider.getSigner();
+    return new JsonRpcSigner(provider, walletAddress);
   }
 }
 

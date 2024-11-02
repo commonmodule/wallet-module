@@ -1,6 +1,6 @@
 import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
 import { StringUtils } from "@common-module/ts";
-import { BrowserProvider, Eip1193Provider, toBeHex } from "ethers";
+import { BrowserProvider, Eip1193Provider, getAddress, toBeHex } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
@@ -28,8 +28,13 @@ class CoinbaseWalletConnector implements WalletConnector {
   }
 
   public async connect() {
-    await this.eip1193Provider.request({ method: "eth_requestAccounts" });
-    return new BrowserProvider(this.eip1193Provider);
+    const accounts = await this.eip1193Provider.request({
+      method: "eth_requestAccounts",
+    });
+    return {
+      provider: new BrowserProvider(this.eip1193Provider),
+      walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
+    };
   }
 
   public async disconnect() {}

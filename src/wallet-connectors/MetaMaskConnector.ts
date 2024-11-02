@@ -40,8 +40,13 @@ class MetaMaskConnector extends EventContainer<{
 
   public async connect() {
     if (windowEthereum) {
-      await windowEthereum.request({ method: "eth_requestAccounts" });
-      return new BrowserProvider(windowEthereum);
+      const accounts = await windowEthereum.request<string[]>({
+        method: "eth_requestAccounts",
+      });
+      return {
+        provider: new BrowserProvider(windowEthereum),
+        walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
+      };
     } else {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
       await this.metaMaskSdk.connect();
@@ -49,8 +54,13 @@ class MetaMaskConnector extends EventContainer<{
       if (!this.eip1193Provider) {
         throw new Error("MetaMask SDK provider not found");
       }
-      await this.eip1193Provider.request({ method: "eth_requestAccounts" });
-      return new BrowserProvider(this.eip1193Provider);
+      const accounts = await this.eip1193Provider.request({
+        method: "eth_requestAccounts",
+      });
+      return {
+        provider: new BrowserProvider(this.eip1193Provider),
+        walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
+      };
     }
   }
 

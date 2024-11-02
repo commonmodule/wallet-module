@@ -77,19 +77,29 @@ class WalletConnectConnector extends EventContainer<{
   }
 
   public async connect() {
-    const walletAddress = this.web3Modal.getAddress();
+    let walletAddress = this.web3Modal.getAddress();
     if (walletAddress !== undefined) {
-      this.emit("addressChanged", getAddress(walletAddress));
+      walletAddress = getAddress(walletAddress);
+      this.emit("addressChanged", walletAddress);
     } else {
       await new Promise<void>((resolve, reject) => {
         this.resolveConnection = resolve;
         this.rejectConnection = reject;
         this._web3Modal?.open();
       });
+
+      walletAddress = this.web3Modal.getAddress();
+      if (walletAddress !== undefined) {
+        walletAddress = getAddress(walletAddress);
+      }
     }
+
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");
-    return new BrowserProvider(walletProvider);
+    return {
+      provider: new BrowserProvider(walletProvider),
+      walletAddress,
+    };
   }
 
   public async disconnect() {
