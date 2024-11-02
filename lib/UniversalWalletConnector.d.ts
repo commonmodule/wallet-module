@@ -12,7 +12,7 @@ declare class UniversalWalletConnector {
         provider: BrowserProvider;
         walletAddress?: string;
     }>;
-    disconnect(walletId: string): Promise<void>;
+    disconnectAll(): void;
     addChain(walletId: string, chainName: string): Promise<void>;
 }
 declare const _default: UniversalWalletConnector;

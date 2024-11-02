@@ -2,9 +2,9 @@ import { DomNode, el } from "@common-module/app";
 import { Button, ButtonGroup, ButtonType } from "@common-module/app-components";
 import UniversalWalletConnector from "../UniversalWalletConnector.js";
 import WalletConnectionManager from "../WalletConnectionManager.js";
-import WalletConnectLogo from "./wallet-logos/WalletConnectLogo.js";
-import MetaMaskLogo from "./wallet-logos/MetaMaskLogo.js";
 import CoinbaseWalletLogo from "./wallet-logos/CoinbaseWalletLogo.js";
+import MetaMaskLogo from "./wallet-logos/MetaMaskLogo.js";
+import WalletConnectLogo from "./wallet-logos/WalletConnectLogo.js";
 
 export default class WalletConnectionContent extends DomNode {
   constructor(
@@ -13,6 +13,7 @@ export default class WalletConnectionContent extends DomNode {
     private onBeforeConnect?: (walletId: string) => void,
   ) {
     super(".wallet-connection-content");
+
     this.append(
       el(
         "section",
@@ -49,13 +50,13 @@ export default class WalletConnectionContent extends DomNode {
         ),
       ),
     );
+
+    UniversalWalletConnector.disconnectAll();
   }
 
   private async handleConnect(walletId: string) {
     try {
       if (this.onBeforeConnect) this.onBeforeConnect(walletId);
-
-      await UniversalWalletConnector.disconnect(walletId);
 
       const { walletAddress } = await UniversalWalletConnector.connect(
         walletId,

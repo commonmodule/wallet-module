@@ -41,10 +41,10 @@ class UniversalWalletConnector {
     return await connector.connect();
   }
 
-  public async disconnect(walletId: string): Promise<void> {
-    const connector = this.walletConnectors[walletId];
-    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
-    await connector.disconnect();
+  public disconnectAll() {
+    for (const connector of Object.values(this.walletConnectors)) {
+      connector.disconnect();
+    }
   }
 
   public async addChain(walletId: string, chainName: string): Promise<void> {

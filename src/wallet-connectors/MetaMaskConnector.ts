@@ -49,14 +49,14 @@ class MetaMaskConnector extends EventContainer<{
       };
     } else {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
-      await this.metaMaskSdk.connect();
+
+      const accounts = await this.metaMaskSdk.connect();
+
       this.eip1193Provider = this.metaMaskSdk.getProvider();
       if (!this.eip1193Provider) {
         throw new Error("MetaMask SDK provider not found");
       }
-      const accounts = await this.eip1193Provider.request({
-        method: "eth_requestAccounts",
-      });
+
       return {
         provider: new BrowserProvider(this.eip1193Provider),
         walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
@@ -71,7 +71,7 @@ class MetaMaskConnector extends EventContainer<{
         params: [{ eth_accounts: {} }],
       });
     } else {
-      await this.metaMaskSdk?.disconnect();
+      await this.metaMaskSdk?.terminate();
     }
   }
 
