@@ -50,6 +50,7 @@ class WalletConnectionManager extends EventContainer<{
     let walletAddress = await UniversalWalletConnector.connect(
       this.connectedWallet!,
     );
+
     if (walletAddress === undefined) throw new Error("No accounts found");
     if (!this.connectedAddress || walletAddress !== this.connectedAddress) {
       throw new Error("Connected wallet address does not match");

@@ -2,7 +2,7 @@ import { EventContainer, StringUtils } from "@common-module/ts";
 import { BrowserProvider, getAddress, toBeHex } from "ethers";
 import WalletConnector, { ChainInfo } from "./WalletConnector.js";
 
-const windowEthereum = window.ethereum!;
+const windowEthereum = window.ethereum as any;
 
 class MetaMaskExtenstionConnector extends EventContainer<{
   addressChanged: (address: string | undefined) => void;
@@ -23,9 +23,9 @@ class MetaMaskExtenstionConnector extends EventContainer<{
   }
 
   public async connect() {
-    const accounts = await windowEthereum.request<string[]>({
+    const accounts = await windowEthereum.request({
       method: "eth_requestAccounts",
-    });
+    }) as string[] | undefined;
     return accounts?.[0] ? getAddress(accounts[0]) : undefined;
   }
 

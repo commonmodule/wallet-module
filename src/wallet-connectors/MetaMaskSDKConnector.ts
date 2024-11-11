@@ -1,15 +1,18 @@
 import { EventContainer, StringUtils } from "@common-module/ts";
-import { MetaMaskSDK } from "@metamask/sdk";
 import { BrowserProvider, Eip1193Provider, getAddress, toBeHex } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
 } from "./WalletConnector.js";
 
+const METAMASK_STORES = {
+  ios: "https://apps.apple.com/us/app/metamask/id1438144202",
+  android: "https://play.google.com/store/apps/details?id=io.metamask",
+};
+
 class MetaMaskSDKConnector extends EventContainer<{
   addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
-  private metaMaskSdk: MetaMaskSDK | undefined;
   private eip1193Provider: Eip1193Provider | undefined;
   private connectedAddress: string | undefined;
 
@@ -17,17 +20,14 @@ class MetaMaskSDKConnector extends EventContainer<{
   public connectedProvider: BrowserProvider | undefined;
 
   public init(options: WalletConnectorOptions) {
-    this.metaMaskSdk = new MetaMaskSDK({
-      dappMetadata: {
-        name: options.name,
-        url: window.location.origin,
-        iconUrl: options.icon,
-      },
-    });
   }
 
   public async connect() {
-    if (!this.connectedProvider) {
+    const currentUrl = window.location.href;
+    const metamaskDeepLink = `https://metamask.app.link/dapp/${currentUrl}`;
+    window.location.href = metamaskDeepLink;
+
+    /*if (!this.connectedProvider) {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
       const accounts = await this.metaMaskSdk.connect();
 
@@ -41,11 +41,18 @@ class MetaMaskSDKConnector extends EventContainer<{
         ? getAddress(accounts[0])
         : undefined;
     }
-    return this.connectedAddress;
+
+    console.log(this.metaMaskSdk?.isAuthorized());
+    console.log(this.metaMaskSdk?.isExtensionActive());
+    console.log(this.metaMaskSdk?.isInitialized());
+    console.log(this.metaMaskSdk?.getWalletStatus());
+
+    return this.connectedAddress;*/
+
+    return undefined;
   }
 
   public async disconnect() {
-    await this.metaMaskSdk?.terminate();
   }
 
   public async addChain(chain: ChainInfo) {

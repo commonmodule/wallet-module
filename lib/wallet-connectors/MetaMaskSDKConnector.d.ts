@@ -4,13 +4,12 @@ import WalletConnector, { ChainInfo, WalletConnectorOptions } from "./WalletConn
 declare class MetaMaskSDKConnector extends EventContainer<{
     addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
-    private metaMaskSdk;
     private eip1193Provider;
     private connectedAddress;
     displayMode: "modal";
     connectedProvider: BrowserProvider | undefined;
     init(options: WalletConnectorOptions): void;
-    connect(): Promise<string | undefined>;
+    connect(): Promise<undefined>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
     switchChain(chain: ChainInfo): Promise<void>;
