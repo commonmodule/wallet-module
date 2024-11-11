@@ -11,6 +11,7 @@ class MetaMaskSDKConnector extends EventContainer<{
 }> implements WalletConnector {
   private metaMaskSdk: MetaMaskSDK | undefined;
   private eip1193Provider: Eip1193Provider | undefined;
+  private connectedAddress: string | undefined;
 
   public displayMode: "modal" = "modal";
   public connectedProvider: BrowserProvider | undefined;
@@ -26,17 +27,21 @@ class MetaMaskSDKConnector extends EventContainer<{
   }
 
   public async connect() {
-    if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
-    const accounts = await this.metaMaskSdk.connect();
+    if (!this.connectedProvider) {
+      if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
+      const accounts = await this.metaMaskSdk.connect();
 
-    this.eip1193Provider = this.metaMaskSdk.getProvider();
-    if (!this.eip1193Provider) {
-      throw new Error("MetaMask SDK provider not found");
+      this.eip1193Provider = this.metaMaskSdk.getProvider();
+      if (!this.eip1193Provider) {
+        throw new Error("MetaMask SDK provider not found");
+      }
+
+      this.connectedProvider = new BrowserProvider(this.eip1193Provider);
+      this.connectedAddress = accounts?.[0]
+        ? getAddress(accounts[0])
+        : undefined;
     }
-
-    this.connectedProvider = new BrowserProvider(this.eip1193Provider);
-
-    return accounts?.[0] ? getAddress(accounts[0]) : undefined;
+    return this.connectedAddress;
   }
 
   public async disconnect() {

@@ -6,6 +6,7 @@ declare class MetaMaskSDKConnector extends EventContainer<{
 }> implements WalletConnector {
     private metaMaskSdk;
     private eip1193Provider;
+    private connectedAddress;
     displayMode: "modal";
     connectedProvider: BrowserProvider | undefined;
     init(options: WalletConnectorOptions): void;
