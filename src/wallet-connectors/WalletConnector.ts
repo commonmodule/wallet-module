@@ -16,8 +16,12 @@ export interface WalletConnectorOptions {
 
 export default interface WalletConnector {
   init(options: WalletConnectorOptions): void;
-  checkDisplayMode(): "modal" | "extension";
-  connect(): Promise<{ provider: BrowserProvider; walletAddress?: string }>;
+
+  get provider(): BrowserProvider;
+  get displayMode(): "modal" | "extension";
+
+  connect(): Promise<string | undefined>; // return wallet address
   disconnect(): Promise<void>;
   addChain(chain: ChainInfo): Promise<void>;
+  switchChain(chain: ChainInfo): Promise<void>;
 }

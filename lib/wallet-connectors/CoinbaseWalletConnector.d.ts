@@ -4,13 +4,12 @@ declare class CoinbaseWalletConnector implements WalletConnector {
     private _eip1193Provider;
     private get eip1193Provider();
     init(options: WalletConnectorOptions): void;
-    checkDisplayMode(): "modal" | "extension";
-    connect(): Promise<{
-        provider: BrowserProvider;
-        walletAddress: string | undefined;
-    }>;
+    get displayMode(): "modal" | "extension";
+    get provider(): BrowserProvider;
+    connect(): Promise<string | undefined>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
+    switchChain(chain: ChainInfo): Promise<void>;
 }
 declare const _default: CoinbaseWalletConnector;
 export default _default;

@@ -23,18 +23,19 @@ class CoinbaseWalletConnector implements WalletConnector {
     }).makeWeb3Provider();
   }
 
-  public checkDisplayMode(): "modal" | "extension" {
+  public get displayMode(): "modal" | "extension" {
     return "modal";
+  }
+
+  public get provider() {
+    return new BrowserProvider(this.eip1193Provider);
   }
 
   public async connect() {
     const accounts = await this.eip1193Provider.request({
       method: "eth_requestAccounts",
     });
-    return {
-      provider: new BrowserProvider(this.eip1193Provider),
-      walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
-    };
+    return accounts?.[0] ? getAddress(accounts[0]) : undefined;
   }
 
   public async disconnect() {}
@@ -49,6 +50,13 @@ class CoinbaseWalletConnector implements WalletConnector {
         nativeCurrency: { symbol: chain.symbol, decimals: 18 },
         rpcUrls: [chain.rpc],
       }],
+    });
+  }
+
+  public async switchChain(chain: ChainInfo): Promise<void> {
+    await this.eip1193Provider.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: toBeHex(chain.id).replace(/^0x0+/, "0x") }],
     });
   }
 }

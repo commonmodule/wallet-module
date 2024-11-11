@@ -9,7 +9,9 @@ declare class WalletConnectionManager extends EventContainer<{
     get isConnected(): boolean;
     addConnectionInfo(walletId: string, walletAddress: string): void;
     disconnect(): Promise<void>;
-    getSigner(): Promise<JsonRpcSigner>;
+    getBalance(): Promise<bigint>;
+    addChain(chainName: string): Promise<void>;
+    getSigner(targetChainName: string): Promise<JsonRpcSigner>;
 }
 declare const _default: WalletConnectionManager;
 export default _default;

@@ -1,4 +1,3 @@
-import { BrowserProvider } from "ethers";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
 import WalletConnectConnector, {
@@ -27,15 +26,19 @@ class UniversalWalletConnector {
     }
   }
 
-  public checkDisplayMode(walletId: string): "modal" | "extension" {
+  public getDisplayMode(walletId: string): "modal" | "extension" {
     const connector = this.walletConnectors[walletId];
     if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
-    return connector.checkDisplayMode();
+    return connector.displayMode;
   }
 
-  public async connect(
-    walletId: string,
-  ): Promise<{ provider: BrowserProvider; walletAddress?: string }> {
+  public getProvider(walletId: string) {
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
+    return connector.provider;
+  }
+
+  public async connect(walletId: string): Promise<string | undefined> {
     const connector = this.walletConnectors[walletId];
     if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
     return await connector.connect();
@@ -57,6 +60,19 @@ class UniversalWalletConnector {
     if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
 
     await connector.addChain(chainInfo);
+  }
+
+  public async switchChain(walletId: string, chainName: string): Promise<void> {
+    if (!this.options) throw new Error("Options not initialized");
+
+    const chainInfo = this.options?.chains[chainName];
+    if (!chainInfo) throw new Error(`Chain ${chainName} not found`);
+
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
+
+    await connector.addChain(chainInfo); // add chain if not already added
+    await connector.switchChain(chainInfo);
   }
 }
 

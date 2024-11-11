@@ -7,13 +7,12 @@ declare class MetaMaskConnector extends EventContainer<{
     private metaMaskSdk;
     private eip1193Provider;
     init(options: WalletConnectorOptions): void;
-    checkDisplayMode(): "modal" | "extension";
-    connect(): Promise<{
-        provider: BrowserProvider;
-        walletAddress: string | undefined;
-    }>;
+    get displayMode(): "modal" | "extension";
+    get provider(): BrowserProvider;
+    connect(): Promise<string | undefined>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
+    switchChain(chain: ChainInfo): Promise<void>;
 }
 declare const _default: MetaMaskConnector;
 export default _default;

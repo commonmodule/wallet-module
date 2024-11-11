@@ -34,8 +34,17 @@ class MetaMaskConnector extends EventContainer<{
     }
   }
 
-  public checkDisplayMode(): "modal" | "extension" {
+  public get displayMode(): "modal" | "extension" {
     return windowEthereum ? "extension" : "modal";
+  }
+
+  public get provider() {
+    if (windowEthereum) {
+      return new BrowserProvider(windowEthereum);
+    } else {
+      if (!this.eip1193Provider) throw new Error("No EIP-1193 provider");
+      return new BrowserProvider(this.eip1193Provider);
+    }
   }
 
   public async connect() {
@@ -43,24 +52,11 @@ class MetaMaskConnector extends EventContainer<{
       const accounts = await windowEthereum.request<string[]>({
         method: "eth_requestAccounts",
       });
-      return {
-        provider: new BrowserProvider(windowEthereum),
-        walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
-      };
+      return accounts?.[0] ? getAddress(accounts[0]) : undefined;
     } else {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
-
       const accounts = await this.metaMaskSdk.connect();
-
-      this.eip1193Provider = this.metaMaskSdk.getProvider();
-      if (!this.eip1193Provider) {
-        throw new Error("MetaMask SDK provider not found");
-      }
-
-      return {
-        provider: new BrowserProvider(this.eip1193Provider),
-        walletAddress: accounts?.[0] ? getAddress(accounts[0]) : undefined,
-      };
+      return accounts?.[0] ? getAddress(accounts[0]) : undefined;
     }
   }
 
@@ -87,6 +83,15 @@ class MetaMaskConnector extends EventContainer<{
         nativeCurrency: { symbol: chain.symbol, decimals: 18 },
         rpcUrls: [chain.rpc],
       }],
+    });
+  }
+
+  public async switchChain(chain: ChainInfo): Promise<void> {
+    const provider = windowEthereum || this.eip1193Provider;
+    if (!provider) throw new Error("No EIP-1193 provider");
+    await provider.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: toBeHex(chain.id).replace(/^0x0+/, "0x") }],
     });
   }
 }
