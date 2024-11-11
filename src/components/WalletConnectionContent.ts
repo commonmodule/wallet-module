@@ -58,7 +58,9 @@ export default class WalletConnectionContent extends DomNode {
     try {
       if (this.onBeforeConnect) this.onBeforeConnect(walletId);
 
-      const walletAddress = await UniversalWalletConnector.connect(walletId);
+      const { walletAddress } = await UniversalWalletConnector.connect(
+        walletId,
+      );
       if (walletAddress === undefined) throw new Error("No accounts found");
 
       WalletConnectionManager.addConnectionInfo(walletId, walletAddress);

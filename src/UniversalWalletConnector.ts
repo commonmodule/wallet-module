@@ -1,3 +1,4 @@
+import { BrowserProvider, JsonRpcProvider } from "ethers";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
 import WalletConnectConnector, {
@@ -19,6 +20,8 @@ class UniversalWalletConnector {
     | WalletConnectConnectorOptions
     | undefined;
 
+  private viewProvider: Record<string, JsonRpcProvider> = {};
+
   public init(options: WalletConnectorOptions | WalletConnectConnectorOptions) {
     this.options = options;
     for (const walletConnector of Object.values(this.walletConnectors)) {
@@ -32,13 +35,9 @@ class UniversalWalletConnector {
     return connector.displayMode;
   }
 
-  public async getProvider(walletId: string) {
-    const connector = this.walletConnectors[walletId];
-    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
-    return await connector.getProvider();
-  }
-
-  public async connect(walletId: string): Promise<string | undefined> {
+  public async connect(
+    walletId: string,
+  ): Promise<{ provider: BrowserProvider; walletAddress?: string }> {
     const connector = this.walletConnectors[walletId];
     if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
     return await connector.connect();
@@ -48,6 +47,29 @@ class UniversalWalletConnector {
     for (const connector of Object.values(this.walletConnectors)) {
       connector.disconnect();
     }
+  }
+
+  public async getBalance(
+    chainName: string,
+    walletAddress: string,
+  ): Promise<bigint> {
+    let viewProvider = this.viewProvider[chainName];
+    if (!viewProvider) {
+      const chainInfo = this.options?.chains[chainName];
+      if (!chainInfo) throw new Error(`Chain ${chainName} not found`);
+
+      viewProvider = this.viewProvider[chainName] = new JsonRpcProvider(
+        chainInfo.rpc,
+      );
+    }
+
+    return await viewProvider.getBalance(walletAddress);
+  }
+
+  public getConnectedProvider(walletId: string): BrowserProvider {
+    const connector = this.walletConnectors[walletId];
+    if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
+    return connector.connectedProvider;
   }
 
   public async addChain(walletId: string, chainName: string): Promise<void> {

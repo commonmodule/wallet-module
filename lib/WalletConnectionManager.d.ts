@@ -9,7 +9,7 @@ declare class WalletConnectionManager extends EventContainer<{
     get isConnected(): boolean;
     addConnectionInfo(walletId: string, walletAddress: string): void;
     disconnect(): Promise<void>;
-    getBalance(): Promise<bigint>;
+    getBalance(chainName: string, walletAddress: string): Promise<bigint>;
     addChain(chainName: string): Promise<void>;
     getSigner(targetChainName: string): Promise<JsonRpcSigner>;
 }

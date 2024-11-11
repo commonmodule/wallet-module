@@ -27,7 +27,7 @@ class CoinbaseWalletConnector implements WalletConnector {
     return "modal";
   }
 
-  public async getProvider() {
+  public get connectedProvider(): BrowserProvider {
     return new BrowserProvider(this.eip1193Provider);
   }
 
@@ -35,7 +35,10 @@ class CoinbaseWalletConnector implements WalletConnector {
     const accounts = await this.eip1193Provider.request({
       method: "eth_requestAccounts",
     });
-    return accounts?.[0] ? getAddress(accounts[0]) : undefined;
+    return {
+      provider: new BrowserProvider(this.eip1193Provider),
+      walletAccount: accounts?.[0] ? getAddress(accounts[0]) : undefined,
+    };
   }
 
   public async disconnect() {}

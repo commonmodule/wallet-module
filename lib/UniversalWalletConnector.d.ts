@@ -1,3 +1,4 @@
+import { BrowserProvider } from "ethers";
 import { WalletConnectConnectorOptions } from "./wallet-connectors/WalletConnectConnector.js";
 import WalletConnector, { WalletConnectorOptions } from "./wallet-connectors/WalletConnector.js";
 declare class UniversalWalletConnector {
@@ -5,11 +6,16 @@ declare class UniversalWalletConnector {
         [walletId: string]: WalletConnector;
     };
     private options;
+    private viewProvider;
     init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
     getDisplayMode(walletId: string): "modal" | "extension";
-    getProvider(walletId: string): Promise<import("ethers").BrowserProvider>;
-    connect(walletId: string): Promise<string | undefined>;
+    connect(walletId: string): Promise<{
+        provider: BrowserProvider;
+        walletAddress?: string;
+    }>;
     disconnectAll(): void;
+    getBalance(chainName: string, walletAddress: string): Promise<bigint>;
+    getConnectedProvider(walletId: string): BrowserProvider;
     addChain(walletId: string, chainName: string): Promise<void>;
     switchChain(walletId: string, chainName: string): Promise<void>;
 }

@@ -76,7 +76,7 @@ class WalletConnectConnector extends EventContainer<{
     return "modal";
   }
 
-  public async getProvider() {
+  public get connectedProvider(): BrowserProvider {
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");
     return new BrowserProvider(walletProvider);
@@ -101,7 +101,13 @@ class WalletConnectConnector extends EventContainer<{
       }
     }
 
-    return walletAddress;
+    const walletProvider = this.web3Modal.getWalletProvider();
+    if (!walletProvider) throw new Error("Wallet provider not found");
+
+    return {
+      provider: new BrowserProvider(walletProvider),
+      walletAddress,
+    };
   }
 
   public async disconnect() {

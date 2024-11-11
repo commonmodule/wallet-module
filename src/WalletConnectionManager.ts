@@ -32,14 +32,9 @@ class WalletConnectionManager extends EventContainer<{
     this.emit("connectionChanged");
   }
 
-  public async getBalance() {
+  public async getBalance(chainName: string, walletAddress: string) {
     if (!this.isConnected) throw new Error("Not connected");
-
-    const provider = await UniversalWalletConnector.getProvider(
-      this.connectedWallet!,
-    );
-
-    return await provider.getBalance(this.connectedAddress!);
+    return await UniversalWalletConnector.getBalance(chainName, walletAddress);
   }
 
   public async addChain(chainName: string) {
@@ -52,7 +47,7 @@ class WalletConnectionManager extends EventContainer<{
   public async getSigner(targetChainName: string): Promise<JsonRpcSigner> {
     if (!this.isConnected) throw new Error("Not connected");
 
-    const walletAddress = await UniversalWalletConnector.connect(
+    let { provider, walletAddress } = await UniversalWalletConnector.connect(
       this.connectedWallet!,
     );
 
@@ -61,9 +56,6 @@ class WalletConnectionManager extends EventContainer<{
       throw new Error("Connected wallet address does not match");
     }
 
-    let provider = await UniversalWalletConnector.getProvider(
-      this.connectedWallet!,
-    );
     let chainName = (await provider.getNetwork()).name;
 
     // switch chain if necessary
@@ -74,7 +66,7 @@ class WalletConnectionManager extends EventContainer<{
       );
 
       // re-fetch provider and chain name
-      provider = await UniversalWalletConnector.getProvider(
+      provider = UniversalWalletConnector.getConnectedProvider(
         this.connectedWallet!,
       );
       chainName = (await provider.getNetwork()).name;
