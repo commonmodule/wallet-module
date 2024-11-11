@@ -3,13 +3,10 @@ import WalletConnector, { ChainInfo, WalletConnectorOptions } from "./WalletConn
 declare class CoinbaseWalletConnector implements WalletConnector {
     private _eip1193Provider;
     private get eip1193Provider();
+    displayMode: "modal";
+    connectedProvider: BrowserProvider | undefined;
     init(options: WalletConnectorOptions): void;
-    get displayMode(): "modal" | "extension";
-    get connectedProvider(): BrowserProvider;
-    connect(): Promise<{
-        provider: BrowserProvider;
-        walletAccount: string | undefined;
-    }>;
+    connect(): Promise<string | undefined>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
     switchChain(chain: ChainInfo): Promise<void>;

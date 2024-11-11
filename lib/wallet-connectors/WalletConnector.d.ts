@@ -12,13 +12,10 @@ export interface WalletConnectorOptions {
     chains: Record<string, ChainInfo>;
 }
 export default interface WalletConnector {
+    displayMode: "modal" | "extension";
+    connectedProvider: BrowserProvider | undefined;
     init(options: WalletConnectorOptions): void;
-    get displayMode(): "modal" | "extension";
-    get connectedProvider(): BrowserProvider;
-    connect(): Promise<{
-        provider: BrowserProvider;
-        walletAddress?: string;
-    }>;
+    connect(): Promise<string | undefined>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
     switchChain(chain: ChainInfo): Promise<void>;

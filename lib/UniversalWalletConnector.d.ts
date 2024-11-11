@@ -9,13 +9,10 @@ declare class UniversalWalletConnector {
     private viewProvider;
     init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
     getDisplayMode(walletId: string): "modal" | "extension";
-    connect(walletId: string): Promise<{
-        provider: BrowserProvider;
-        walletAddress?: string;
-    }>;
+    connect(walletId: string): Promise<string | undefined>;
     disconnectAll(): void;
     getBalance(chainName: string, walletAddress: string): Promise<bigint>;
-    getConnectedProvider(walletId: string): BrowserProvider;
+    getConnectedProvider(walletId: string): BrowserProvider | undefined;
     addChain(walletId: string, chainName: string): Promise<void>;
     switchChain(walletId: string, chainName: string): Promise<void>;
 }

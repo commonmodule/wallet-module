@@ -16,29 +16,22 @@ class CoinbaseWalletConnector implements WalletConnector {
     return this._eip1193Provider;
   }
 
+  public displayMode: "modal" = "modal";
+  public connectedProvider: BrowserProvider | undefined;
+
   public init(options: WalletConnectorOptions) {
     this._eip1193Provider = new CoinbaseWalletSDK({
       appName: options.name,
       appLogoUrl: options.icon,
     }).makeWeb3Provider();
-  }
-
-  public get displayMode(): "modal" | "extension" {
-    return "modal";
-  }
-
-  public get connectedProvider(): BrowserProvider {
-    return new BrowserProvider(this.eip1193Provider);
+    this.connectedProvider = new BrowserProvider(this.eip1193Provider);
   }
 
   public async connect() {
     const accounts = await this.eip1193Provider.request({
       method: "eth_requestAccounts",
     });
-    return {
-      provider: new BrowserProvider(this.eip1193Provider),
-      walletAccount: accounts?.[0] ? getAddress(accounts[0]) : undefined,
-    };
+    return accounts?.[0] ? getAddress(accounts[0]) : undefined;
   }
 
   public async disconnect() {}

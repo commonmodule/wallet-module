@@ -21,6 +21,9 @@ class WalletConnectConnector extends EventContainer<{
     return this._web3Modal;
   }
 
+  public displayMode: "modal" = "modal";
+  public connectedProvider: BrowserProvider | undefined;
+
   private resolveConnection: (() => void) | undefined;
   private rejectConnection: ((error: Error) => void) | undefined;
 
@@ -72,16 +75,6 @@ class WalletConnectConnector extends EventContainer<{
     });
   }
 
-  public get displayMode(): "modal" | "extension" {
-    return "modal";
-  }
-
-  public get connectedProvider(): BrowserProvider {
-    const walletProvider = this.web3Modal.getWalletProvider();
-    if (!walletProvider) throw new Error("Wallet provider not found");
-    return new BrowserProvider(walletProvider);
-  }
-
   public async connect() {
     let walletAddress = this.web3Modal.getAddress();
 
@@ -104,10 +97,9 @@ class WalletConnectConnector extends EventContainer<{
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");
 
-    return {
-      provider: new BrowserProvider(walletProvider),
-      walletAddress,
-    };
+    this.connectedProvider = new BrowserProvider(walletProvider);
+
+    return walletAddress;
   }
 
   public async disconnect() {
@@ -117,6 +109,7 @@ class WalletConnectConnector extends EventContainer<{
   public async addChain(chain: ChainInfo) {
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");
+
     await walletProvider.request({
       method: "wallet_addEthereumChain",
       params: [
@@ -134,6 +127,7 @@ class WalletConnectConnector extends EventContainer<{
   public async switchChain(chain: ChainInfo) {
     const walletProvider = this.web3Modal.getWalletProvider();
     if (!walletProvider) throw new Error("Wallet provider not found");
+
     await walletProvider.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: toBeHex(chain.id).replace(/^0x0+/, "0x") }],
