@@ -56,6 +56,12 @@ class MetaMaskConnector extends EventContainer<{
     } else {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
       const accounts = await this.metaMaskSdk.connect();
+
+      this.eip1193Provider = this.metaMaskSdk.getProvider();
+      if (!this.eip1193Provider) {
+        throw new Error("MetaMask SDK provider not found");
+      }
+
       return accounts?.[0] ? getAddress(accounts[0]) : undefined;
     }
   }
