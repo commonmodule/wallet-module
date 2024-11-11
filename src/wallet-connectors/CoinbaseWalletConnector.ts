@@ -27,7 +27,7 @@ class CoinbaseWalletConnector implements WalletConnector {
     return "modal";
   }
 
-  public get provider() {
+  public async getProvider() {
     return new BrowserProvider(this.eip1193Provider);
   }
 

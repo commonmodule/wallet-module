@@ -7,7 +7,7 @@ declare class UniversalWalletConnector {
     private options;
     init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
     getDisplayMode(walletId: string): "modal" | "extension";
-    getProvider(walletId: string): import("ethers").BrowserProvider;
+    getProvider(walletId: string): Promise<import("ethers").BrowserProvider>;
     connect(walletId: string): Promise<string | undefined>;
     disconnectAll(): void;
     addChain(walletId: string, chainName: string): Promise<void>;

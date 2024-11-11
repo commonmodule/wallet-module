@@ -32,10 +32,10 @@ class UniversalWalletConnector {
     return connector.displayMode;
   }
 
-  public getProvider(walletId: string) {
+  public async getProvider(walletId: string) {
     const connector = this.walletConnectors[walletId];
     if (!connector) throw new Error(`Unsupported walletId: ${walletId}`);
-    return connector.provider;
+    return await connector.getProvider();
   }
 
   public async connect(walletId: string): Promise<string | undefined> {

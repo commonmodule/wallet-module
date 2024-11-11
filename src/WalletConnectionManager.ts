@@ -35,9 +35,10 @@ class WalletConnectionManager extends EventContainer<{
   public async getBalance() {
     if (!this.isConnected) throw new Error("Not connected");
 
-    const provider = UniversalWalletConnector.getProvider(
+    const provider = await UniversalWalletConnector.getProvider(
       this.connectedWallet!,
     );
+
     return await provider.getBalance(this.connectedAddress!);
   }
 
@@ -60,7 +61,9 @@ class WalletConnectionManager extends EventContainer<{
       throw new Error("Connected wallet address does not match");
     }
 
-    let provider = UniversalWalletConnector.getProvider(this.connectedWallet!);
+    let provider = await UniversalWalletConnector.getProvider(
+      this.connectedWallet!,
+    );
     let chainName = (await provider.getNetwork()).name;
 
     // switch chain if necessary
@@ -71,7 +74,9 @@ class WalletConnectionManager extends EventContainer<{
       );
 
       // re-fetch provider and chain name
-      provider = UniversalWalletConnector.getProvider(this.connectedWallet!);
+      provider = await UniversalWalletConnector.getProvider(
+        this.connectedWallet!,
+      );
       chainName = (await provider.getNetwork()).name;
     }
 

@@ -1,6 +1,6 @@
 import { EventContainer, StringUtils } from "@common-module/ts";
 import { MetaMaskSDK } from "@metamask/sdk";
-import { BrowserProvider, getAddress, toBeHex } from "ethers";
+import { BrowserProvider, Eip1193Provider, getAddress, toBeHex } from "ethers";
 import WalletConnector, {
   ChainInfo,
   WalletConnectorOptions,
@@ -12,6 +12,7 @@ class MetaMaskConnector extends EventContainer<{
   addressChanged: (address: string | undefined) => void;
 }> implements WalletConnector {
   private metaMaskSdk: MetaMaskSDK | undefined;
+  private eip1193Provider: Eip1193Provider | undefined;
 
   public init(options: WalletConnectorOptions) {
     if (windowEthereum) {
@@ -37,17 +38,18 @@ class MetaMaskConnector extends EventContainer<{
     return windowEthereum ? "extension" : "modal";
   }
 
-  private get eip1193Provider() {
-    if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
-    const eip1193Provider = this.metaMaskSdk.getProvider();
-    if (!eip1193Provider) throw new Error("MetaMask SDK provider not found");
-    return eip1193Provider;
-  }
-
-  public get provider() {
+  public async getProvider() {
     if (windowEthereum) {
       return new BrowserProvider(windowEthereum);
     } else {
+      if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
+      await this.metaMaskSdk.connect();
+
+      this.eip1193Provider = this.metaMaskSdk.getProvider();
+      if (!this.eip1193Provider) {
+        throw new Error("MetaMask SDK provider not found");
+      }
+
       return new BrowserProvider(this.eip1193Provider);
     }
   }
@@ -61,6 +63,12 @@ class MetaMaskConnector extends EventContainer<{
     } else {
       if (!this.metaMaskSdk) throw new Error("MetaMask SDK not found");
       const accounts = await this.metaMaskSdk.connect();
+
+      this.eip1193Provider = this.metaMaskSdk.getProvider();
+      if (!this.eip1193Provider) {
+        throw new Error("MetaMask SDK provider not found");
+      }
+
       return accounts?.[0] ? getAddress(accounts[0]) : undefined;
     }
   }

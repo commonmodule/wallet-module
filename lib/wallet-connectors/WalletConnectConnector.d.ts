@@ -14,7 +14,7 @@ declare class WalletConnectConnector extends EventContainer<{
     private rejectConnection;
     init(options: WalletConnectConnectorOptions): void;
     get displayMode(): "modal" | "extension";
-    get provider(): BrowserProvider;
+    getProvider(): Promise<BrowserProvider>;
     connect(): Promise<string | undefined>;
     disconnect(): Promise<void>;
     addChain(chain: ChainInfo): Promise<void>;
