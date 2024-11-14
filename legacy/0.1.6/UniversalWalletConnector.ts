@@ -1,4 +1,5 @@
 import { BrowserProvider, JsonRpcProvider } from "ethers";
+import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
 import WalletConnectConnector, {
   WalletConnectConnectorOptions,
@@ -11,6 +12,7 @@ class UniversalWalletConnector {
   public walletConnectors: { [walletId: string]: WalletConnector } = {
     "walletconnect": WalletConnectConnector,
     "metamask": MetaMaskConnector,
+    "coinbase-wallet": CoinbaseWalletConnector,
   };
 
   private options:

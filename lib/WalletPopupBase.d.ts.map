@@ -1,1 +1,0 @@
-{"version":3,"file":"WalletPopupBase.d.ts","sourceRoot":"","sources":["../src/WalletPopupBase.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,+BAA+B,CAAC;AAGhE,MAAM,CAAC,OAAO,CAAC,QAAQ,OAAO,eAAgB,SAAQ,eAAe;IACnE,SAAS,CAAC,qBAAqB,CAAC,QAAQ,EAAE,MAAM;IAMhD,SAAS,CAAC,YAAY,CAAC,QAAQ,EAAE,MAAM;CAKxC"}
