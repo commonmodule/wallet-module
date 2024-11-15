@@ -1,90 +1,39 @@
-import { Store } from "@common-module/app";
-import { EventContainer } from "@common-module/ts";
-import { JsonRpcSigner } from "ethers";
-import UniversalWalletConnector from "./UniversalWalletConnector.js";
+import { AppKit, createAppKit, Metadata } from "@reown/appkit";
+import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
+import { AppKitSIWEClient } from "@reown/appkit-siwe";
+import { AppKitNetwork } from "@reown/appkit/networks";
 
-class WalletConnectionManager extends EventContainer<{
-  connectionChanged: () => void;
-}> {
-  private store = new Store("wallet-connection-manager");
+class WalletConnectionManager {
+  private _modal: AppKit | undefined;
 
-  public get connectedWallet() {
-    return this.store.get<string>("connectedWallet");
+  private get modal() {
+    if (!this._modal) throw new Error("Modal not initialized");
+    return this._modal;
   }
 
-  public get connectedAddress() {
-    return this.store.get<string>("connectedAddress");
+  private set modal(modal: AppKit) {
+    this._modal = modal;
   }
 
-  public get isConnected() {
-    return !!this.connectedWallet && !!this.connectedAddress;
-  }
+  public init(
+    projectId: string,
+    metadata: Metadata,
+    networks: [AppKitNetwork, ...AppKitNetwork[]],
+    siweConfig?: AppKitSIWEClient,
+  ) {
+    const wagmiAdapter = new WagmiAdapter({
+      projectId,
+      networks,
+    });
 
-  public addConnectionInfo(walletId: string, walletAddress: string) {
-    this.store.setPermanent("connectedWallet", walletId);
-    this.store.setPermanent("connectedAddress", walletAddress);
-    this.emit("connectionChanged");
-  }
-
-  public async disconnect() {
-    this.store.remove("connectedWallet");
-    this.store.remove("connectedAddress");
-    this.emit("connectionChanged");
-  }
-
-  public async getBalance(chainName: string, walletAddress: string) {
-    if (!this.isConnected) throw new Error("Not connected");
-    return await UniversalWalletConnector.getBalance(chainName, walletAddress);
-  }
-
-  public async addChain(chainName: string) {
-    if (!this.isConnected) throw new Error("Not connected");
-
-    const walletId = this.connectedWallet!;
-    await UniversalWalletConnector.addChain(walletId, chainName);
-  }
-
-  public async getSigner(targetChainName: string): Promise<JsonRpcSigner> {
-    if (!this.isConnected) throw new Error("Not connected");
-
-    let walletAddress = await UniversalWalletConnector.connect(
-      this.connectedWallet!,
-    );
-
-    if (walletAddress === undefined) throw new Error("No accounts found");
-    if (!this.connectedAddress || walletAddress !== this.connectedAddress) {
-      throw new Error("Connected wallet address does not match");
-    }
-
-    let provider = UniversalWalletConnector.getConnectedProvider(
-      this.connectedWallet!,
-    );
-    if (!provider) throw new Error("Provider not found");
-
-    let chainName = (await provider.getNetwork()).name;
-
-    // switch chain if necessary
-    if (chainName !== targetChainName) {
-      await UniversalWalletConnector.switchChain(
-        this.connectedWallet!,
-        targetChainName,
-      );
-
-      // re-fetch provider
-      provider = UniversalWalletConnector.getConnectedProvider(
-        this.connectedWallet!,
-      );
-      if (!provider) throw new Error("Provider not found");
-
-      // re-fetch chain name
-      chainName = (await provider.getNetwork()).name;
-    }
-
-    if (chainName !== targetChainName) {
-      throw new Error("Connected chain does not match");
-    }
-
-    return new JsonRpcSigner(provider, walletAddress);
+    this.modal = createAppKit({
+      adapters: [wagmiAdapter],
+      networks,
+      metadata,
+      projectId,
+      features: { analytics: true },
+      siweConfig,
+    });
   }
 }
 
