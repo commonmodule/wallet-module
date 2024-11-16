@@ -43,9 +43,9 @@ export default class WalletSessionManager extends EventContainer<{
     this.connector.openWallet();
   }
 
-  public disconnect() {
+  public async disconnect() {
     this.store.remove("walletAddress");
-    this.connector.disconnect();
+    await this.connector.disconnect();
   }
 
   public async readContract<
