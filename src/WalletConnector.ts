@@ -1,8 +1,6 @@
 import { EventContainer } from "@common-module/ts";
-import { AppKit, createAppKit, Metadata } from "@reown/appkit";
+import { AppKit } from "@reown/appkit";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
-import { AppKitSIWEClient } from "@reown/appkit-siwe";
-import { AppKitNetwork } from "@reown/appkit/networks";
 import {
   Config,
   readContract,
@@ -12,43 +10,14 @@ import {
 } from "@wagmi/core";
 import type { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
 
-export interface WalletConnectorOptions {
-  projectId: string;
-  metadata: Metadata;
-  networks: [AppKitNetwork, ...AppKitNetwork[]];
-  siweConfig?: AppKitSIWEClient;
-}
-
-class WalletConnector extends EventContainer<{
+export default class WalletConnector extends EventContainer<{
   addressChanged: (walletAddress: string | undefined) => void;
 }> {
-  private _modal: AppKit | undefined;
-  private get modal() {
-    if (!this._modal) throw new Error("Modal not initialized");
-    return this._modal;
-  }
-  private set modal(modal: AppKit) {
-    this._modal = modal;
-  }
-
-  private wagmiAdapter: WagmiAdapter | undefined;
-  private getWagmiConfig() {
-    if (!this.wagmiAdapter) throw new Error("Wagmi adapter not initialized");
-    return this.wagmiAdapter.wagmiConfig;
-  }
-
   public walletAddress: string | undefined;
 
-  public init(options: WalletConnectorOptions) {
-    this.wagmiAdapter = new WagmiAdapter(options);
-
-    this.modal = createAppKit({
-      ...options,
-      adapters: [this.wagmiAdapter],
-      features: { analytics: true },
-    });
-
-    this.modal.subscribeAccount((newState) => {
+  constructor(private appKit: AppKit) {
+    super();
+    this.appKit.subscribeAccount((newState) => {
       if (this.walletAddress !== newState.address) {
         this.walletAddress = newState.address;
         this.emit("addressChanged", this.walletAddress);
@@ -57,11 +26,11 @@ class WalletConnector extends EventContainer<{
   }
 
   public openWallet() {
-    this.modal.open();
+    this.appKit.open();
   }
 
   public disconnect() {
-    this.modal.adapter?.connectionControllerClient?.disconnect();
+    this.appKit.adapter?.connectionControllerClient?.disconnect();
   }
 
   public async readContract<
@@ -69,7 +38,10 @@ class WalletConnector extends EventContainer<{
     functionName extends ContractFunctionName<abi, "pure" | "view">,
     args extends ContractFunctionArgs<abi, "pure" | "view", functionName>,
   >(parameters: ReadContractParameters<abi, functionName, args, Config>) {
-    return await readContract(this.getWagmiConfig(), parameters);
+    return await readContract(
+      (this.appKit.adapters![0] as WagmiAdapter).wagmiConfig,
+      parameters,
+    );
   }
 
   public async writeContract<
@@ -90,8 +62,9 @@ class WalletConnector extends EventContainer<{
       chainId
     >,
   ) {
-    return await writeContract(this.getWagmiConfig(), parameters);
+    return await writeContract(
+      (this.appKit.adapters![0] as WagmiAdapter).wagmiConfig,
+      parameters,
+    );
   }
 }
-
-export default new WalletConnector();
