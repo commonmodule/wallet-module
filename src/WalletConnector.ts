@@ -37,6 +37,13 @@ export default class WalletConnector extends EventContainer<{
     } catch (e) {
       console.error(e);
     }
+
+    try {
+      await (this.appKit.adapters![0] as WagmiAdapter)
+        .connectionControllerClient?.disconnect();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   public async readContract<
