@@ -19,22 +19,24 @@ export default class WalletSessionManager extends EventContainer<{
     return this.store.get<string>("walletAddress");
   }
 
-  constructor(appKit: AppKit) {
+  constructor(public appKit: AppKit) {
     super();
-    this.connector = new WalletConnector(appKit);
-    this.connector.on("addressChanged", (walletAddress) => {
-      if (this.getWalletAddress()) {
-        if (walletAddress === undefined) {
-          this.store.remove("walletAddress");
-          this.emit("sessionChanged", undefined);
-        } else if (walletAddress !== this.getWalletAddress()) {
-          this.connector.disconnect();
+    this.connector = new WalletConnector(appKit).on(
+      "addressChanged",
+      (walletAddress) => {
+        if (this.getWalletAddress()) {
+          if (walletAddress === undefined) {
+            this.store.remove("walletAddress");
+            this.emit("sessionChanged", undefined);
+          } else if (walletAddress !== this.getWalletAddress()) {
+            this.disconnect();
+          }
+        } else if (walletAddress !== undefined) {
+          this.store.setPermanent("walletAddress", walletAddress);
+          this.emit("sessionChanged", walletAddress);
         }
-      } else if (walletAddress !== undefined) {
-        this.store.setPermanent("walletAddress", walletAddress);
-        this.emit("sessionChanged", walletAddress);
-      }
-    });
+      },
+    );
   }
 
   public openWallet() {
@@ -42,6 +44,7 @@ export default class WalletSessionManager extends EventContainer<{
   }
 
   public disconnect() {
+    this.store.remove("walletAddress");
     this.connector.disconnect();
   }
 

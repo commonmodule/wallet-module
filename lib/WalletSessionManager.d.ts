@@ -5,6 +5,7 @@ import type { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
 export default class WalletSessionManager extends EventContainer<{
     sessionChanged: (walletAddress: string | undefined) => void;
 }> {
+    appKit: AppKit;
     private connector;
     private store;
     getWalletAddress(): string | undefined;
