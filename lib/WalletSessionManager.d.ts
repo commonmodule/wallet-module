@@ -1,7 +1,7 @@
 import { EventContainer } from "@common-module/ts";
 import { AppKit } from "@reown/appkit";
 import { Config, ReadContractParameters, WriteContractParameters } from "@wagmi/core";
-import type { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
+import { type Abi, type ContractFunctionArgs, type ContractFunctionName } from "viem";
 export default class WalletSessionManager extends EventContainer<{
     sessionChanged: (walletAddress: string | undefined) => void;
 }> {

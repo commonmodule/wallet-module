@@ -30,6 +30,8 @@ export default class WalletConnector extends EventContainer<{
   }
 
   public async disconnect() {
+    console.log("[WalletConnector] Disconnecting...");
+
     try {
       await this.appKit.adapter?.connectionControllerClient?.disconnect();
     } catch (e) {

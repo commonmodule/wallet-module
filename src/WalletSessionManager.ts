@@ -6,7 +6,12 @@ import {
   ReadContractParameters,
   WriteContractParameters,
 } from "@wagmi/core";
-import type { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
+import {
+  type Abi,
+  type ContractFunctionArgs,
+  type ContractFunctionName,
+  getAddress,
+} from "viem";
 import WalletConnector from "./WalletConnector.js";
 
 export default class WalletSessionManager extends EventContainer<{
@@ -24,6 +29,14 @@ export default class WalletSessionManager extends EventContainer<{
     this.connector = new WalletConnector(appKit).on(
       "addressChanged",
       (walletAddress) => {
+        if (walletAddress) walletAddress = getAddress(walletAddress);
+
+        console.log(
+          "[WalletSessionManager] Wallet address changed",
+          this.getWalletAddress(),
+          walletAddress,
+        );
+
         if (this.getWalletAddress()) {
           if (walletAddress === undefined) {
             this.store.remove("walletAddress");
@@ -44,6 +57,8 @@ export default class WalletSessionManager extends EventContainer<{
   }
 
   public async disconnect() {
+    console.log("[WalletSessionManager] Disconnecting...");
+
     this.store.remove("walletAddress");
     await this.connector.disconnect();
   }
