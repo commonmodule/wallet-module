@@ -28,4 +28,4 @@ declare class WalletConnectionManager extends EventContainer<{
 }
 declare const _default: WalletConnectionManager;
 export default _default;
-//# sourceMappingURL=WalletConnectionManager.d.ts.map
+//# sourceMappingURL=WalletConnectionManager%20copy.d.ts.map
