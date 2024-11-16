@@ -8,7 +8,12 @@ import {
   writeContract,
   WriteContractParameters,
 } from "@wagmi/core";
-import type { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
+import {
+  type Abi,
+  type ContractFunctionArgs,
+  type ContractFunctionName,
+  getAddress,
+} from "viem";
 
 export default class WalletConnector extends EventContainer<{
   addressChanged: (walletAddress: string | undefined) => void;
@@ -18,9 +23,13 @@ export default class WalletConnector extends EventContainer<{
   constructor(private appKit: AppKit) {
     super();
     this.appKit.subscribeAccount((newState) => {
-      if (this.walletAddress !== newState.address) {
-        this.walletAddress = newState.address;
-        this.emit("addressChanged", this.walletAddress);
+      const walletAddress = newState.address
+        ? getAddress(newState.address)
+        : undefined;
+
+      if (this.walletAddress !== walletAddress) {
+        this.walletAddress = walletAddress;
+        this.emit("addressChanged", walletAddress);
       }
     });
   }
@@ -34,13 +43,6 @@ export default class WalletConnector extends EventContainer<{
 
     try {
       await this.appKit.adapter?.connectionControllerClient?.disconnect();
-    } catch (e) {
-      console.error(e);
-    }
-
-    try {
-      await (this.appKit.adapters![0] as WagmiAdapter)
-        .connectionControllerClient?.disconnect();
     } catch (e) {
       console.error(e);
     }
@@ -75,6 +77,7 @@ export default class WalletConnector extends EventContainer<{
       chainId
     >,
   ) {
+    console.log(this.appKit.adapter, this.appKit.adapters);
     return await writeContract(
       (this.appKit.adapters![0] as WagmiAdapter).wagmiConfig,
       parameters,
