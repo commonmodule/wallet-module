@@ -22,24 +22,22 @@ export interface WalletConnectorOptions {
 class WalletConnector extends EventContainer<{
   addressChanged: (walletAddress: string | undefined) => void;
 }> {
-  public walletAddress: string | undefined;
-
-  private wagmiAdapter: WagmiAdapter | undefined;
   private _modal: AppKit | undefined;
-
   private get modal() {
     if (!this._modal) throw new Error("Modal not initialized");
     return this._modal;
   }
-
   private set modal(modal: AppKit) {
     this._modal = modal;
   }
 
+  private wagmiAdapter: WagmiAdapter | undefined;
   private getWagmiConfig() {
     if (!this.wagmiAdapter) throw new Error("Wagmi adapter not initialized");
     return this.wagmiAdapter.wagmiConfig;
   }
+
+  public walletAddress: string | undefined;
 
   public init(options: WalletConnectorOptions) {
     this.wagmiAdapter = new WagmiAdapter(options);
@@ -58,7 +56,7 @@ class WalletConnector extends EventContainer<{
     });
   }
 
-  public openModal() {
+  public openWallet() {
     this.modal.open();
   }
 

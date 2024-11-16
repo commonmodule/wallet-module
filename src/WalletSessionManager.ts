@@ -38,8 +38,8 @@ class WalletSessionManager extends EventContainer<{
     WalletConnector.init(options);
   }
 
-  public openModal() {
-    WalletConnector.openModal();
+  public openWallet() {
+    WalletConnector.openWallet();
   }
 
   public async readContract<
