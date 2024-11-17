@@ -22,9 +22,9 @@ export default class WalletConnector extends EventContainer<{
 
   constructor(private appKit: AppKit) {
     super();
-    this.appKit.subscribeAccount((newState) => {
-      const walletAddress = newState.address
-        ? getAddress(newState.address)
+    this.appKit.subscribeShouldUpdateToAddress((address) => {
+      const walletAddress = address
+        ? getAddress(address)
         : undefined;
 
       if (this.walletAddress !== walletAddress) {
