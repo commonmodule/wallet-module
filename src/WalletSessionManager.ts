@@ -162,8 +162,8 @@ class WalletSessionManager
             message:
               `You are currently connected to ${currentChain}. Unable to execute transaction on ${targetChain}. Would you like to switch to ${targetChain}?`,
             confirmButtonTitle: "Switch Network",
-            onConfirm: async () => {
-              await UniversalWalletConnector.switchChain(targetChainId);
+            onConfirm: () => {
+              UniversalWalletConnector.switchChain(targetChainId);
             },
           });
         }
