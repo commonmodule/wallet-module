@@ -1,20 +1,12 @@
-import { BrowserProvider } from "ethers";
-import { WalletConnectConnectorOptions } from "./wallet-connectors/WalletConnectConnector.js";
-import WalletConnector, { WalletConnectorOptions } from "./wallet-connectors/WalletConnector.js";
+import { Config } from "@wagmi/core";
+import WalletConnector from "./wallet-connectors/WalletConnector.js";
 declare class UniversalWalletConnector {
-    walletConnectors: {
-        [walletId: string]: WalletConnector;
-    };
-    private options;
-    private viewProvider;
-    init(options: WalletConnectorOptions | WalletConnectConnectorOptions): void;
-    getDisplayMode(walletId: string): "modal" | "extension";
-    connect(walletId: string): Promise<string | undefined>;
-    disconnectAll(): void;
-    getBalance(chainName: string, walletAddress: string): Promise<bigint>;
-    getConnectedProvider(walletId: string): BrowserProvider | undefined;
-    addChain(walletId: string, chainName: string): Promise<void>;
-    switchChain(walletId: string, chainName: string): Promise<void>;
+    private _config?;
+    protected get config(): Config;
+    protected set config(config: Config);
+    connectors: WalletConnector[];
+    init(): void;
+    disconnect(): void;
 }
 declare const _default: UniversalWalletConnector;
 export default _default;

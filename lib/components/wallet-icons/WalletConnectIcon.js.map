@@ -1,0 +1,1 @@
+{"version":3,"file":"WalletConnectIcon.js","sourceRoot":"","sources":["../../../src/components/wallet-icons/WalletConnectIcon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,oBAAoB,CAAC;AAE7C,MAAM,CAAC,OAAO,OAAO,iBAAkB,SAAQ,OAAO;IACpD;QACE,KAAK,CAAC,qBAAqB,CAAC,CAAC;QAC7B,IAAI,CAAC,WAAW,CAAC,SAAS;YACxB;;;;OAIC,CAAC;IACN,CAAC;CACF"}

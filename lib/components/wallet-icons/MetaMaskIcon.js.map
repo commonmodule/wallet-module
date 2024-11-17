@@ -1,0 +1,1 @@
+{"version":3,"file":"MetaMaskIcon.js","sourceRoot":"","sources":["../../../src/components/wallet-icons/MetaMaskIcon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,oBAAoB,CAAC;AAE7C,MAAM,CAAC,OAAO,OAAO,YAAa,SAAQ,OAAO;IAC/C;QACE,KAAK,CAAC,gBAAgB,CAAC,CAAC;QACxB,IAAI,CAAC,WAAW,CAAC,SAAS;YACxB;;;;;;;;;;;;;;OAcC,CAAC;IACN,CAAC;CACF"}

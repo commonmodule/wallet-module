@@ -1,1 +1,1 @@
-{"version":3,"file":"MetaMaskConnector.d.ts","sourceRoot":"","sources":["../../src/wallet-connectors/MetaMaskConnector.ts"],"names":[],"mappings":"AAEA,OAAO,eAAe,MAAM,sBAAsB,CAAC;AAInD,QAAA,MAAM,iBAAiB,EAAE,eAED,CAAC;AAEzB,eAAe,iBAAiB,CAAC"}
+{"version":3,"file":"MetaMaskConnector.d.ts","sourceRoot":"","sources":["../../src/wallet-connectors/MetaMaskConnector.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,MAAM,EAAE,MAAM,aAAa,CAAC;AACrC,OAAO,eAAe,MAAM,sBAAsB,CAAC;AAEnD,cAAM,iBAAkB,SAAQ,eAAe;IACtC,QAAQ,SAAc;IAEtB,IAAI,CAAC,MAAM,EAAE,MAAM;CAI3B;;AAED,wBAAuC"}

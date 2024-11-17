@@ -1,8 +1,14 @@
-import WalletModalBase from "../WalletModalBase.js";
-export default class WalletConnectionModal extends WalletModalBase {
-    private resolveConnect;
-    private rejectConnect;
-    constructor();
-    waitForConnection(): Promise<void>;
+import { StructuredModal } from "@common-module/app-components";
+interface ConnectionResult {
+    walletId: string;
+    walletAddress: string;
 }
+export default class WalletConnectionModal extends StructuredModal {
+    private resolveConnection?;
+    private rejectConnection?;
+    constructor();
+    private handleConnect;
+    waitForLogin(): Promise<ConnectionResult>;
+}
+export {};
 //# sourceMappingURL=WalletConnectionModal.d.ts.map
