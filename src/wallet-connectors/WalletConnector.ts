@@ -3,7 +3,7 @@ import {
   connect,
   ConnectReturnType,
   CreateConnectorFn,
-  signMessage,
+  signMessage
 } from "@wagmi/core";
 
 export default abstract class WalletConnector {

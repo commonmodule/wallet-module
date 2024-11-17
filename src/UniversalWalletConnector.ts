@@ -1,4 +1,21 @@
-import { Config, createConfig, disconnect, http } from "@wagmi/core";
+import {
+  Config,
+  createConfig,
+  disconnect,
+  getAccount,
+  getBalance,
+  getChainId,
+  http,
+  readContract,
+  ReadContractParameters,
+  writeContract,
+  WriteContractParameters,
+} from "@wagmi/core";
+import {
+  type Abi,
+  type ContractFunctionArgs,
+  type ContractFunctionName,
+} from "viem";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
 import WalletConnectConnector from "./wallet-connectors/WalletConnectConnector.js";
@@ -36,6 +53,48 @@ class UniversalWalletConnector {
 
   public disconnect() {
     disconnect(this.config);
+  }
+
+  public getChainId() {
+    return getChainId(this.config);
+  }
+
+  public getAddress() {
+    return getAccount(this.config).address;
+  }
+
+  public async getBalance(chainId: number, walletAddress: `0x${string}`) {
+    return (await getBalance(this.config, { chainId, address: walletAddress }))
+      .value;
+  }
+
+  public async readContract<
+    const abi extends Abi | readonly unknown[],
+    functionName extends ContractFunctionName<abi, "pure" | "view">,
+    args extends ContractFunctionArgs<abi, "pure" | "view", functionName>,
+  >(parameters: ReadContractParameters<abi, functionName, args, Config>) {
+    return await readContract(this.config, parameters);
+  }
+
+  public async writeContract<
+    const abi extends Abi | readonly unknown[],
+    functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
+    args extends ContractFunctionArgs<
+      abi,
+      "nonpayable" | "payable",
+      functionName
+    >,
+    chainId extends Config["chains"][number]["id"],
+  >(
+    parameters: WriteContractParameters<
+      abi,
+      functionName,
+      args,
+      Config,
+      chainId
+    >,
+  ) {
+    return await writeContract(this.config, parameters);
   }
 }
 
