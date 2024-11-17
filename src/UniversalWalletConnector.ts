@@ -4,7 +4,7 @@ import {
   disconnect,
   getAccount,
   getBalance,
-  getChainId,
+  getWalletClient,
   http,
   readContract,
   ReadContractParameters,
@@ -18,6 +18,7 @@ import {
   type Abi,
   type ContractFunctionArgs,
   type ContractFunctionName,
+  hexToNumber,
 } from "viem";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
@@ -53,7 +54,9 @@ class UniversalWalletConnector {
       connector.init(this.config);
     }
 
-    reconnect(this.config);
+    reconnect(this.config, {
+      connectors: this.connectors.map((connector) => connector.wagmiConnector),
+    });
   }
 
   public disconnect() {
@@ -61,10 +64,11 @@ class UniversalWalletConnector {
   }
 
   public async getChainId() {
-    for (const connector of this.config.connectors) {
-      return await connector.getChainId();
-    }
-    return getChainId(this.config);
+    const walletClient = await getWalletClient(this.config);
+    const hexChainId = await walletClient.request({
+      method: "eth_chainId",
+    });
+    return hexToNumber(hexChainId);
   }
 
   public async switchChain(chainId: number) {
