@@ -1,4 +1,5 @@
 import { Store } from "@common-module/app";
+import { ConfirmDialog } from "@common-module/app-components";
 import { EventContainer } from "@common-module/ts";
 import {
   Config,
@@ -10,8 +11,18 @@ import {
   type ContractFunctionArgs,
   type ContractFunctionName,
 } from "viem";
+import * as all from "viem/chains";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
+
+const { ...chains } = all;
+function getChainById(chainId: number) {
+  for (const chain of Object.values(chains)) {
+    if (chain.id === chainId) {
+      return chain;
+    }
+  }
+}
 
 class WalletSessionManager
   extends EventContainer<{ sessionChanged: () => void }> {
@@ -32,6 +43,8 @@ class WalletSessionManager
   }
 
   public async connect() {
+    this.disconnect();
+
     const result = await new WalletConnectionModal().waitForLogin();
 
     this.store.setPermanent("connectedWallet", result.walletId);
@@ -79,14 +92,54 @@ class WalletSessionManager
       chainId
     >,
   ) {
-    if (!this.getConnectedAddress()) throw new Error("Not connected");
+    if (!this.getConnectedAddress() || !UniversalWalletConnector.getAddress()) {
+      new ConfirmDialog(".connect-wallet", {
+        title: "Connect Wallet",
+        message:
+          "Unable to execute transaction because no wallet is connected. Would you like to connect your wallet?",
+        confirmButtonTitle: "Connect Wallet",
+        onConfirm: () => {
+          this.connect();
+        },
+      });
+      throw new Error("Not connected");
+    }
+
     if (UniversalWalletConnector.getAddress() !== this.getConnectedAddress()) {
+      new ConfirmDialog(".reconnect-wallet", {
+        title: "Reconnect Wallet",
+        message:
+          "Unable to execute transaction because the connected wallet address differs from your crypto wallet's current address. Would you like to reconnect your wallet?",
+        confirmButtonTitle: "Reconnect Wallet",
+        onConfirm: () => {
+          this.connect();
+        },
+      });
       throw new Error("Wallet address mismatch");
     }
 
-    if (parameters.chainId !== UniversalWalletConnector.getChainId()) {
-      //TODO: Add chain switching logic
-      throw new Error("Chain mismatch");
+    if (!parameters.chainId) throw new Error("Chain ID not provided");
+
+    const chainId = await UniversalWalletConnector.getChainId();
+    if (chainId !== parameters.chainId) {
+      const currentChain = getChainById(chainId)
+        ?.name;
+      const targetChain = getChainById(parameters.chainId)?.name;
+
+      await new ConfirmDialog(".switch-network", {
+        title: "Switch Network",
+        message:
+          `You are currently connected to ${currentChain}. Unable to execute transaction on ${targetChain}. Would you like to switch to ${targetChain}?`,
+        confirmButtonTitle: "Switch Network",
+      }).waitForConfirmation();
+
+      const changedChainId = await UniversalWalletConnector.switchChain(
+        parameters.chainId!,
+      );
+
+      if (changedChainId !== parameters.chainId) {
+        throw new Error("Chain mismatch");
+      }
     }
 
     return await UniversalWalletConnector.writeContract(parameters);

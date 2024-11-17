@@ -8,6 +8,9 @@ import {
   http,
   readContract,
   ReadContractParameters,
+  reconnect,
+  switchChain,
+  waitForTransactionReceipt,
   writeContract,
   WriteContractParameters,
 } from "@wagmi/core";
@@ -49,14 +52,24 @@ class UniversalWalletConnector {
     for (const connector of this.connectors) {
       connector.init(this.config);
     }
+
+    reconnect(this.config);
   }
 
   public disconnect() {
     disconnect(this.config);
   }
 
-  public getChainId() {
+  public async getChainId() {
+    for (const connector of this.config.connectors) {
+      return await connector.getChainId();
+    }
     return getChainId(this.config);
+  }
+
+  public async switchChain(chainId: number) {
+    const result = await switchChain(this.config, { chainId });
+    return result.id;
   }
 
   public getAddress() {
@@ -94,7 +107,9 @@ class UniversalWalletConnector {
       chainId
     >,
   ) {
-    return await writeContract(this.config, parameters);
+    const hash = await writeContract(this.config, parameters);
+    const receipt = await waitForTransactionReceipt(this.config, { hash });
+    console.log(receipt);
   }
 }
 
