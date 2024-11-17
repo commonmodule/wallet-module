@@ -2,14 +2,15 @@
   "name": "@common-module/wallet",
   "author": "yj.gaia",
   "homepage": "https://yj.dev",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
   "dependencies": {
     "@common-module/app-components": "^0.1.6",
-    "viem": "^2.21.45",
-    "wagmi": "^2.12.33"
+    "@wagmi/connectors": "^5.4.0",
+    "@wagmi/core": "^2.14.6",
+    "viem": "2.x"
   },
   "devDependencies": {}
 }
