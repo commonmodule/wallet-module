@@ -133,8 +133,8 @@ class WalletSessionManager
           const currentChainId = parseInt(match[1]);
           const targetChainId = parameters.chainId;
 
-          const currentChain = getChainById(currentChainId)?.name;
-          const targetChain = getChainById(targetChainId)?.name;
+          const currentChain = getChainById(currentChainId)?.name ?? "Unknown";
+          const targetChain = getChainById(targetChainId)?.name ?? "Unknown";
 
           new ConfirmDialog(".switch-network", {
             title: "Switch Network",
