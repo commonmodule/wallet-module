@@ -10,6 +10,11 @@ class WalletConnectConnector extends WalletConnector {
     this.config = config;
     this.wagmiConnector = walletConnect({
       projectId: WalletModuleConfig.walletConnectProjectId,
+      qrModalOptions: {
+        themeVariables: {
+          "--wcm-z-index": "99998",
+        },
+      },
     });
   }
 }
