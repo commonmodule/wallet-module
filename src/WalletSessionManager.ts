@@ -1,5 +1,5 @@
 import { Store } from "@common-module/app";
-import { ConfirmDialog } from "@common-module/app-components";
+import { ConfirmDialog, ErrorDialog } from "@common-module/app-components";
 import { EventContainer } from "@common-module/ts";
 import {
   Config,
@@ -144,7 +144,7 @@ class WalletSessionManager
 
     try {
       return await UniversalWalletConnector.writeContract(parameters);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ContractFunctionExecutionError) {
         const pattern =
           /The current chain of the wallet \(id: (\d+)\) does not match the target chain for the transaction \(id: (\d+)/;
@@ -167,7 +167,13 @@ class WalletSessionManager
             },
           });
         }
+      } else {
+        new ErrorDialog({
+          title: "Transaction Failed",
+          message: error.message,
+        });
       }
+
       throw error;
     }
   }
