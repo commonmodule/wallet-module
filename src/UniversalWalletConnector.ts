@@ -4,6 +4,7 @@ import {
   disconnect,
   getAccount,
   getBalance,
+  getChainId,
   http,
   readContract,
   ReadContractParameters,
@@ -11,12 +12,12 @@ import {
   switchChain,
   waitForTransactionReceipt,
   writeContract,
-  WriteContractParameters
+  WriteContractParameters,
 } from "@wagmi/core";
 import {
   type Abi,
   type ContractFunctionArgs,
-  type ContractFunctionName
+  type ContractFunctionName,
 } from "viem";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
@@ -59,6 +60,10 @@ class UniversalWalletConnector {
 
   public disconnect() {
     disconnect(this.config);
+  }
+
+  public async getChainId() {
+    return getChainId(this.config);
   }
 
   public async switchChain(chainId: number) {

@@ -121,6 +121,27 @@ class WalletSessionManager
 
     if (!parameters.chainId) throw new Error("Chain ID not provided");
 
+    const chainId = await UniversalWalletConnector.getChainId();
+    if (chainId !== parameters.chainId) {
+      const currentChain = getChainById(chainId)?.name ?? "Unknown";
+      const targetChain = getChainById(parameters.chainId)?.name ?? "Unknown";
+
+      await new ConfirmDialog(".switch-network", {
+        title: "Switch Network",
+        message:
+          `You are currently connected to ${currentChain}. Unable to execute transaction on ${targetChain}. Would you like to switch to ${targetChain}?`,
+        confirmButtonTitle: "Switch Network",
+      }).waitForConfirmation();
+
+      const changedChainId = await UniversalWalletConnector.switchChain(
+        parameters.chainId!,
+      );
+
+      if (changedChainId !== parameters.chainId) {
+        throw new Error("Chain mismatch");
+      }
+    }
+
     try {
       return await UniversalWalletConnector.writeContract(parameters);
     } catch (error) {
