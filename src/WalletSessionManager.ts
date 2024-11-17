@@ -9,6 +9,7 @@ import {
 import {
   type Abi,
   type ContractFunctionArgs,
+  ContractFunctionExecutionError,
   type ContractFunctionName,
 } from "viem";
 import * as all from "viem/chains";
@@ -120,29 +121,39 @@ class WalletSessionManager
 
     if (!parameters.chainId) throw new Error("Chain ID not provided");
 
-    const chainId = await UniversalWalletConnector.getChainId();
-    if (chainId !== parameters.chainId) {
-      const currentChain = getChainById(chainId)
-        ?.name;
-      const targetChain = getChainById(parameters.chainId)?.name;
+    try {
+      return await UniversalWalletConnector.writeContract(parameters);
+    } catch (error) {
+      if (error instanceof ContractFunctionExecutionError) {
+        const pattern =
+          /The current chain of the wallet \(id: (\d+)\) does not match the target chain for the transaction \(id: (\d+)/;
+        const match = error.message.match(pattern);
 
-      await new ConfirmDialog(".switch-network", {
-        title: "Switch Network",
-        message:
-          `You are currently connected to ${currentChain}. Unable to execute transaction on ${targetChain}. Would you like to switch to ${targetChain}?`,
-        confirmButtonTitle: "Switch Network",
-      }).waitForConfirmation();
+        if (match) {
+          const currentChainId = parseInt(match[1]);
+          const targetChainId = parameters.chainId;
 
-      const changedChainId = await UniversalWalletConnector.switchChain(
-        parameters.chainId!,
-      );
+          const currentChain = getChainById(currentChainId)?.name;
+          const targetChain = getChainById(targetChainId)?.name;
 
-      if (changedChainId !== parameters.chainId) {
-        throw new Error("Chain mismatch");
+          await new ConfirmDialog(".switch-network", {
+            title: "Switch Network",
+            message:
+              `You are currently connected to ${currentChain}. Unable to execute transaction on ${targetChain}. Would you like to switch to ${targetChain}?`,
+            confirmButtonTitle: "Switch Network",
+          }).waitForConfirmation();
+
+          const changedChainId = await UniversalWalletConnector.switchChain(
+            targetChainId,
+          );
+
+          if (changedChainId !== targetChainId) {
+            throw new Error("Chain mismatch");
+          }
+        }
       }
+      throw error;
     }
-
-    return await UniversalWalletConnector.writeContract(parameters);
   }
 }
 
