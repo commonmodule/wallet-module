@@ -12,18 +12,10 @@ import {
   ContractFunctionExecutionError,
   type ContractFunctionName,
 } from "viem";
-import * as all from "viem/chains";
+import NetworkMismatchModal from "./components/NetworkMismatchModal.js";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
-
-const { ...chains } = all;
-function getChainById(chainId: number) {
-  for (const chain of Object.values(chains)) {
-    if (chain.id === chainId) {
-      return chain;
-    }
-  }
-}
+import getChainById from "./utils/getChainById.js";
 
 class WalletSessionManager extends EventContainer<{
   sessionChanged: (connected: boolean) => void;
@@ -116,7 +108,10 @@ class WalletSessionManager extends EventContainer<{
 
     const chainId = UniversalWalletConnector.getChainId();
     if (chainId !== parameters.chainId) {
-      this.showSwitchNetworkDialog(chainId, parameters.chainId);
+      await new NetworkMismatchModal({
+        currentChainId: chainId,
+        targetChainId: parameters.chainId,
+      }).waitForProceed();
       throw new Error("Chain mismatch");
     }
 
