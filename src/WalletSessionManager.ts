@@ -107,7 +107,9 @@ class WalletSessionManager extends EventContainer<{
       throw new Error("Wallet address mismatch");
     }
 
-    if (!parameters.chainId) throw new Error("Chain ID not provided");
+    if (!parameters.chainId) {
+      throw new Error("Chain ID not provided");
+    }
 
     //await UniversalWalletConnector.getChainIdTest();
 
@@ -117,7 +119,9 @@ class WalletSessionManager extends EventContainer<{
         currentChainId: chainId,
         targetChainId: parameters.chainId,
       }).waitForProceed();*/
-      await this.showSwitchNetworkDialog(chainId, parameters.chainId);
+
+      this.showSwitchNetworkDialog(chainId, parameters.chainId);
+      throw new Error("Network mismatch");
     }
 
     try {
@@ -176,7 +180,7 @@ class WalletSessionManager extends EventContainer<{
     });
   }
 
-  private async showSwitchNetworkDialog(
+  private showSwitchNetworkDialog(
     currentChainId: number | undefined,
     targetChainId: number,
   ) {
@@ -185,7 +189,7 @@ class WalletSessionManager extends EventContainer<{
       : "Unknown";
     const targetChainName = getChainById(targetChainId)?.name ?? "Unknown";
 
-    await new ConfirmDialog(".switch-network", {
+    new ConfirmDialog(".switch-network", {
       icon: new AppCompConfig.WarningIcon(),
       title: "Switch Network",
       message:
@@ -205,7 +209,7 @@ class WalletSessionManager extends EventContainer<{
           throw new Error("Failed to switch network");
         }
       },
-    }).waitForConfirmation();
+    });
   }
 }
 
