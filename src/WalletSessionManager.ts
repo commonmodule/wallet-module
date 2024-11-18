@@ -1,5 +1,6 @@
 import { Store } from "@common-module/app";
 import {
+  AlertDialog,
   AppCompConfig,
   ConfirmDialog,
   ErrorDialog,
@@ -207,6 +208,12 @@ class WalletSessionManager extends EventContainer<{
           });
 
           throw new Error("Failed to switch network");
+        } else {
+          new AlertDialog({
+            icon: new AppCompConfig.SuccessIcon(),
+            title: "Network Switched",
+            message: `You have successfully switched to ${targetChainName}.`,
+          });
         }
       },
     });
