@@ -15,6 +15,7 @@ import {
 import * as all from "viem/chains";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
+import WalletConnector from "./wallet-connectors/WalletConnector.js";
 
 const { ...chains } = all;
 function getChainById(chainId: number) {
@@ -112,6 +113,7 @@ class WalletSessionManager
     }
 
     try {
+      parameters.account = this.getConnectedAddress() as any;
       return await UniversalWalletConnector.writeContract(parameters);
     } catch (error: any) {
       if (error instanceof ContractFunctionExecutionError) {
