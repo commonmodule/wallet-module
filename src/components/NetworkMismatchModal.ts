@@ -70,7 +70,7 @@ export default class NetworkMismatchModal extends StructuredModal {
 
     this.on(
       "remove",
-      () => this.rejectProceed?.(new Error("Canceled by user")),
+      () => this.rejectProceed?.(new Error("Chain mismatch")),
     );
   }
 

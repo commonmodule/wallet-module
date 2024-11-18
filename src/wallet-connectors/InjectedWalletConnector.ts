@@ -18,7 +18,7 @@ export default class InjectedWalletConnector extends WalletConnector {
   constructor(private walletInfo: InjectedWalletInfo, private provider: any) {
     super();
     this.walletId = walletInfo.uuid;
-    this.walletName = walletInfo.name + ` (${walletInfo.rdns})`;
+    this.walletName = walletInfo.name;
     this.walletIcon = el("img.icon", { src: walletInfo.icon });
   }
 

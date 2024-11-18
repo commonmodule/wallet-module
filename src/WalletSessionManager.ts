@@ -112,7 +112,6 @@ class WalletSessionManager extends EventContainer<{
         currentChainId: chainId,
         targetChainId: parameters.chainId,
       }).waitForProceed();
-      throw new Error("Chain mismatch");
     }
 
     try {
