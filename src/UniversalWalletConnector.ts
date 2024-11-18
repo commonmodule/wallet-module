@@ -125,8 +125,9 @@ class UniversalWalletConnector {
     }).waitForConfirmation();
   }
 
-  public switchChain(chainId: number) {
-    switchChain(this.config, { chainId });
+  public async switchChain(chainId: number) {
+    const result = await switchChain(this.config, { chainId });
+    return result.id;
   }
 
   public getAddress() {

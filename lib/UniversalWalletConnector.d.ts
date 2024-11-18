@@ -10,7 +10,7 @@ declare class UniversalWalletConnector {
     disconnect(): void;
     getChainId(): number | undefined;
     getChainIdTest(): Promise<void>;
-    switchChain(chainId: number): void;
+    switchChain(chainId: number): Promise<number>;
     getAddress(): `0x${string}` | undefined;
     getBalance(chainId: number, walletAddress: `0x${string}`): Promise<bigint>;
     readContract<const abi extends Abi | readonly unknown[], functionName extends ContractFunctionName<abi, "pure" | "view">, args extends ContractFunctionArgs<abi, "pure" | "view", functionName>>(parameters: ReadContractParameters<abi, functionName, args, Config>): Promise<import("viem").ContractFunctionReturnType<abi, "pure" | "view", functionName, args>>;

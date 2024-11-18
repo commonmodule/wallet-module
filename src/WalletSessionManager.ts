@@ -16,7 +16,6 @@ import {
   ContractFunctionExecutionError,
   type ContractFunctionName,
 } from "viem";
-import NetworkMismatchModal from "./components/NetworkMismatchModal.js";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
 import getChainById from "./utils/getChainById.js";
@@ -110,14 +109,15 @@ class WalletSessionManager extends EventContainer<{
 
     if (!parameters.chainId) throw new Error("Chain ID not provided");
 
-    await UniversalWalletConnector.getChainIdTest();
+    //await UniversalWalletConnector.getChainIdTest();
 
     const chainId = UniversalWalletConnector.getChainId();
     if (chainId !== parameters.chainId) {
-      await new NetworkMismatchModal({
+      /*await new NetworkMismatchModal({
         currentChainId: chainId,
         targetChainId: parameters.chainId,
-      }).waitForProceed();
+      }).waitForProceed();*/
+      await this.showSwitchNetworkDialog(chainId, parameters.chainId);
     }
 
     try {
@@ -176,7 +176,7 @@ class WalletSessionManager extends EventContainer<{
     });
   }
 
-  private showSwitchNetworkDialog(
+  private async showSwitchNetworkDialog(
     currentChainId: number | undefined,
     targetChainId: number,
   ) {
@@ -185,16 +185,27 @@ class WalletSessionManager extends EventContainer<{
       : "Unknown";
     const targetChainName = getChainById(targetChainId)?.name ?? "Unknown";
 
-    new ConfirmDialog(".switch-network", {
+    await new ConfirmDialog(".switch-network", {
       icon: new AppCompConfig.WarningIcon(),
       title: "Switch Network",
       message:
         `You are currently connected to ${currentChainName}. Unable to execute transaction on ${targetChainName}. Would you like to switch to ${targetChainName}?`,
       confirmButtonTitle: "Switch Network",
-      onConfirm: () => {
-        UniversalWalletConnector.switchChain(targetChainId);
+      onConfirm: async () => {
+        const changedChainId = await UniversalWalletConnector.switchChain(
+          targetChainId,
+        );
+
+        if (changedChainId !== targetChainId) {
+          new ErrorDialog({
+            title: "Network Switch Failed",
+            message: "Failed to switch network",
+          });
+
+          throw new Error("Failed to switch network");
+        }
       },
-    });
+    }).waitForConfirmation();
   }
 }
 
