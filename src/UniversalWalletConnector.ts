@@ -1,3 +1,4 @@
+import { ConfirmDialog } from "@common-module/app-components";
 import { ArrayUtils } from "@common-module/ts";
 import {
   Config,
@@ -5,6 +6,8 @@ import {
   disconnect,
   getAccount,
   getBalance,
+  getChainId,
+  getWalletClient,
   http,
   readContract,
   ReadContractParameters,
@@ -18,6 +21,7 @@ import {
   type Abi,
   type ContractFunctionArgs,
   type ContractFunctionName,
+  hexToNumber,
 } from "viem";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import InjectedWalletConnector, {
@@ -102,6 +106,23 @@ class UniversalWalletConnector {
 
   public getChainId() {
     return getAccount(this.config).chainId;
+  }
+
+  public async getChainIdTest() {
+    const chainId1 = getChainId(this.config);
+    const chainId2 = getAccount(this.config).chainId;
+
+    const walletClient = await getWalletClient(this.config);
+    const hexChainId = await walletClient.request({
+      method: "eth_chainId",
+    });
+    const chainId3 = hexToNumber(hexChainId);
+
+    await new ConfirmDialog({
+      title: "Chain Ids",
+      message:
+        `getChainId: ${chainId1}\ngetAccount: ${chainId2}\neth_chainId: ${chainId3}`,
+    }).waitForConfirmation();
   }
 
   public switchChain(chainId: number) {
