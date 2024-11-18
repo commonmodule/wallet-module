@@ -124,6 +124,11 @@ class WalletSessionManager extends EventContainer<{
         );
         if (match) {
           this.showSwitchNetworkDialog(parseInt(match[1]), parseInt(match[2]));
+        } else {
+          new ErrorDialog({
+            title: "Transaction Failed",
+            message: error.message,
+          });
         }
       } else {
         new ErrorDialog({
