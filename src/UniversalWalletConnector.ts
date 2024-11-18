@@ -1,3 +1,4 @@
+import { ArrayUtils } from "@common-module/ts";
 import {
   Config,
   createConfig,
@@ -37,11 +38,17 @@ class UniversalWalletConnector {
     this._config = config;
   }
 
-  public connectors: WalletConnector[] = [
-    MetaMaskConnector,
-    CoinbaseWalletConnector,
-    WalletConnectConnector,
-  ];
+  public connectors: WalletConnector[] = window.ethereum?.isCoinbaseWallet
+    ? [
+      CoinbaseWalletConnector,
+      MetaMaskConnector,
+      WalletConnectConnector,
+    ]
+    : [
+      MetaMaskConnector,
+      CoinbaseWalletConnector,
+      WalletConnectConnector,
+    ];
 
   public init(walletId?: string) {
     this.config = createConfig({
@@ -65,13 +72,23 @@ class UniversalWalletConnector {
         const walletInfo: InjectedWalletInfo | undefined = event.detail.info;
         const provider = event.detail.provider;
         if (walletInfo && provider) {
-          const connector = new InjectedWalletConnector(walletInfo, provider);
-          this.connectors.unshift(connector);
+          if (
+            walletInfo.rdns === "io.metamask" ||
+            walletInfo.rdns === "io.metamask.mobile"
+          ) {
+            ArrayUtils.pull(this.connectors, MetaMaskConnector);
+            this.connectors.unshift(MetaMaskConnector);
+          } else {
+            const connector = new InjectedWalletConnector(walletInfo, provider);
+            this.connectors.unshift(connector);
 
-          connector.init(this.config);
+            connector.init(this.config);
 
-          if (connector.walletId === walletId) {
-            reconnect(this.config, { connectors: [connector.wagmiConnector] });
+            if (connector.walletId === walletId) {
+              reconnect(this.config, {
+                connectors: [connector.wagmiConnector],
+              });
+            }
           }
         }
       },
