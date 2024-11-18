@@ -4,7 +4,6 @@ import {
   disconnect,
   getAccount,
   getBalance,
-  getChainId,
   http,
   readContract,
   ReadContractParameters,
@@ -12,7 +11,7 @@ import {
   switchChain,
   waitForTransactionReceipt,
   writeContract,
-  WriteContractParameters,
+  WriteContractParameters
 } from "@wagmi/core";
 import {
   type Abi,
@@ -36,12 +35,12 @@ class UniversalWalletConnector {
   }
 
   public connectors: WalletConnector[] = [
-    WalletConnectConnector,
     MetaMaskConnector,
     CoinbaseWalletConnector,
+    WalletConnectConnector,
   ];
 
-  public init() {
+  public init(walletId?: string) {
     this.config = createConfig({
       chains: WalletModuleConfig.chains,
       transports: Object.fromEntries(
@@ -51,11 +50,11 @@ class UniversalWalletConnector {
 
     for (const connector of this.connectors) {
       connector.init(this.config);
-    }
 
-    reconnect(this.config, {
-      connectors: this.connectors.map((connector) => connector.wagmiConnector),
-    });
+      if (connector.walletId === walletId) {
+        reconnect(this.config, { connectors: [connector.wagmiConnector] });
+      }
+    }
   }
 
   public disconnect() {
@@ -63,7 +62,7 @@ class UniversalWalletConnector {
   }
 
   public getChainId() {
-    return getChainId(this.config);
+    return getAccount(this.config).chainId;
   }
 
   public switchChain(chainId: number) {

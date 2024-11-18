@@ -40,7 +40,7 @@ class WalletSessionManager
   }
 
   public init() {
-    UniversalWalletConnector.init();
+    UniversalWalletConnector.init(this.getConnectedWallet());
   }
 
   public async connect() {
@@ -160,10 +160,12 @@ class WalletSessionManager
   }
 
   private showSwitchNetworkDialog(
-    currentChainId: number,
+    currentChainId: number | undefined,
     targetChainId: number,
   ) {
-    const currentChainName = getChainById(currentChainId)?.name ?? "Unknown";
+    const currentChainName = currentChainId
+      ? getChainById(currentChainId)?.name ?? "Unknown"
+      : "Unknown";
     const targetChainName = getChainById(targetChainId)?.name ?? "Unknown";
 
     new ConfirmDialog(".switch-network", {

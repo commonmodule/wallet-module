@@ -6,9 +6,9 @@ declare class UniversalWalletConnector {
     protected get config(): Config;
     protected set config(config: Config);
     connectors: WalletConnector[];
-    init(): void;
+    init(walletId?: string): void;
     disconnect(): void;
-    getChainId(): number;
+    getChainId(): number | undefined;
     switchChain(chainId: number): void;
     getAddress(): `0x${string}` | undefined;
     getBalance(chainId: number, walletAddress: `0x${string}`): Promise<bigint>;
