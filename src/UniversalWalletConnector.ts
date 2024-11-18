@@ -62,13 +62,12 @@ class UniversalWalletConnector {
     disconnect(this.config);
   }
 
-  public async getChainId() {
+  public getChainId() {
     return getChainId(this.config);
   }
 
-  public async switchChain(chainId: number) {
-    const result = await switchChain(this.config, { chainId });
-    return result.id;
+  public switchChain(chainId: number) {
+    switchChain(this.config, { chainId });
   }
 
   public getAddress() {
