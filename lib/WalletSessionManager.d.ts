@@ -2,7 +2,7 @@ import { EventContainer } from "@common-module/ts";
 import { Config, ReadContractParameters, WriteContractParameters } from "@wagmi/core";
 import { type Abi, type ContractFunctionArgs, type ContractFunctionName } from "viem";
 declare class WalletSessionManager extends EventContainer<{
-    sessionChanged: () => void;
+    sessionChanged: (connected: boolean) => void;
 }> {
     private store;
     getConnectedWallet(): string | undefined;

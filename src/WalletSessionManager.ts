@@ -15,7 +15,6 @@ import {
 import * as all from "viem/chains";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
-import WalletConnector from "./wallet-connectors/WalletConnector.js";
 
 const { ...chains } = all;
 function getChainById(chainId: number) {
@@ -26,8 +25,9 @@ function getChainById(chainId: number) {
   }
 }
 
-class WalletSessionManager
-  extends EventContainer<{ sessionChanged: () => void }> {
+class WalletSessionManager extends EventContainer<{
+  sessionChanged: (connected: boolean) => void;
+}> {
   private store = new Store("wallet-session-manager");
 
   public getConnectedWallet() {
@@ -49,19 +49,27 @@ class WalletSessionManager
 
     const result = await new WalletConnectionModal().waitForLogin();
 
+    const currentIsConnected = this.isConnected();
+
     this.store.setPermanent("connectedWallet", result.walletId);
     this.store.setPermanent("connectedAddress", result.walletAddress);
 
-    this.emit("sessionChanged");
+    if (currentIsConnected !== this.isConnected()) {
+      this.emit("sessionChanged", this.isConnected());
+    }
   }
 
   public disconnect() {
     UniversalWalletConnector.disconnect();
 
+    const currentIsConnected = this.isConnected();
+
     this.store.remove("connectedWallet");
     this.store.remove("connectedAddress");
 
-    this.emit("sessionChanged");
+    if (currentIsConnected !== this.isConnected()) {
+      this.emit("sessionChanged", this.isConnected());
+    }
   }
 
   public async getBalance(chainId: number, walletAddress: `0x${string}`) {
