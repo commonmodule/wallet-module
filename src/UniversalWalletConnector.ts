@@ -11,7 +11,7 @@ import {
   switchChain,
   waitForTransactionReceipt,
   writeContract,
-  WriteContractParameters
+  WriteContractParameters,
 } from "@wagmi/core";
 import {
   type Abi,
@@ -19,6 +19,9 @@ import {
   type ContractFunctionName,
 } from "viem";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
+import InjectedWalletConnector, {
+  InjectedWalletInfo,
+} from "./wallet-connectors/InjectedWalletConnector.js";
 import MetaMaskConnector from "./wallet-connectors/MetaMaskConnector.js";
 import WalletConnectConnector from "./wallet-connectors/WalletConnectConnector.js";
 import WalletConnector from "./wallet-connectors/WalletConnector.js";
@@ -55,6 +58,25 @@ class UniversalWalletConnector {
         reconnect(this.config, { connectors: [connector.wagmiConnector] });
       }
     }
+
+    window.addEventListener(
+      "eip6963:announceProvider",
+      (event: any) => {
+        const walletInfo: InjectedWalletInfo | undefined = event.detail.info;
+        const provider = event.detail.provider;
+        if (walletInfo && provider) {
+          const connector = new InjectedWalletConnector(walletInfo, provider);
+          this.connectors.unshift(connector);
+
+          connector.init(this.config);
+
+          if (connector.walletId === walletId) {
+            reconnect(this.config, { connectors: [connector.wagmiConnector] });
+          }
+        }
+      },
+    );
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
   }
 
   public disconnect() {

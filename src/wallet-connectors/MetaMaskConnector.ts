@@ -1,9 +1,12 @@
 import { metaMask } from "@wagmi/connectors";
 import { Config, connect, ConnectReturnType } from "@wagmi/core";
+import MetaMaskIcon from "../components/wallet-icons/MetaMaskIcon.js";
 import WalletConnector from "./WalletConnector.js";
 
 class MetaMaskConnector extends WalletConnector {
   public walletId = "metamask";
+  public walletName = "MetaMask";
+  public walletIcon = new MetaMaskIcon();
 
   public init(config: Config) {
     this.config = config;

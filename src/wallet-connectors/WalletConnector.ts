@@ -1,13 +1,16 @@
+import { DomNode } from "@common-module/app";
 import {
   Config,
   connect,
   ConnectReturnType,
   CreateConnectorFn,
-  signMessage
+  signMessage,
 } from "@wagmi/core";
 
 export default abstract class WalletConnector {
   abstract walletId: string;
+  abstract walletName: string;
+  abstract walletIcon: DomNode;
 
   private _config?: Config;
   protected get config() {

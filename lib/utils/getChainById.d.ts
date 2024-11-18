@@ -2,6 +2,45 @@ import * as all from "viem/chains";
 export default function getChainById(chainId: number): {
     blockExplorers: {
         readonly default: {
+            readonly name: "Etherscan";
+            readonly url: "https://etherscan.io";
+            readonly apiUrl: "https://api.etherscan.io/api";
+        };
+    };
+    contracts: {
+        readonly ensRegistry: {
+            readonly address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
+        };
+        readonly ensUniversalResolver: {
+            readonly address: "0xce01f8eee7E479C928F8919abD53E553a36CeF67";
+            readonly blockCreated: 19258213;
+        };
+        readonly multicall3: {
+            readonly address: "0xca11bde05977b3631167028862be2a173976ca11";
+            readonly blockCreated: 14353601;
+        };
+    };
+    id: 1;
+    name: "Ethereum";
+    nativeCurrency: {
+        readonly name: "Ether";
+        readonly symbol: "ETH";
+        readonly decimals: 18;
+    };
+    rpcUrls: {
+        readonly default: {
+            readonly http: readonly ["https://cloudflare-eth.com"];
+        };
+    };
+    sourceId?: number | undefined;
+    testnet?: boolean | undefined;
+    custom?: Record<string, unknown> | undefined;
+    fees?: import("viem").ChainFees<undefined> | undefined;
+    formatters?: undefined;
+    serializers?: import("viem").ChainSerializers<undefined, import("viem").TransactionSerializable<bigint, number>> | undefined;
+} | {
+    blockExplorers: {
+        readonly default: {
             readonly name: "Abey Scan";
             readonly url: "https://abeyscan.com";
         };
@@ -317,7 +356,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -14359,45 +14398,6 @@ export default function getChainById(chainId: number): {
 } | {
     blockExplorers: {
         readonly default: {
-            readonly name: "Etherscan";
-            readonly url: "https://etherscan.io";
-            readonly apiUrl: "https://api.etherscan.io/api";
-        };
-    };
-    contracts: {
-        readonly ensRegistry: {
-            readonly address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
-        };
-        readonly ensUniversalResolver: {
-            readonly address: "0xce01f8eee7E479C928F8919abD53E553a36CeF67";
-            readonly blockCreated: 19258213;
-        };
-        readonly multicall3: {
-            readonly address: "0xca11bde05977b3631167028862be2a173976ca11";
-            readonly blockCreated: 14353601;
-        };
-    };
-    id: 1;
-    name: "Ethereum";
-    nativeCurrency: {
-        readonly name: "Ether";
-        readonly symbol: "ETH";
-        readonly decimals: 18;
-    };
-    rpcUrls: {
-        readonly default: {
-            readonly http: readonly ["https://cloudflare-eth.com"];
-        };
-    };
-    sourceId?: number | undefined;
-    testnet?: boolean | undefined;
-    custom?: Record<string, unknown> | undefined;
-    fees?: import("viem").ChainFees<undefined> | undefined;
-    formatters?: undefined;
-    serializers?: import("viem").ChainSerializers<undefined, import("viem").TransactionSerializable<bigint, number>> | undefined;
-} | {
-    blockExplorers: {
-        readonly default: {
             readonly name: "Mandala Blockscout";
             readonly url: "https://blockscout.mandala.aca-staging.network";
             readonly apiUrl: "https://blockscout.mandala.aca-staging.network/api";
@@ -18860,7 +18860,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -23681,7 +23681,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -24084,7 +24084,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -27783,7 +27783,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -28195,7 +28195,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -28607,7 +28607,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;
@@ -29020,7 +29020,7 @@ export default function getChainById(chainId: number): {
             type: "transactionReceipt";
         };
         readonly transactionRequest: {
-            exclude: ("gasPerPubdata" | "paymaster" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
+            exclude: ("paymaster" | "gasPerPubdata" | "factoryDeps" | "paymasterInput" | "customSignature")[] | undefined;
             format: (args: all.ZkSyncTransactionRequest<bigint, number>) => ({
                 data?: `0x${string}` | undefined;
                 from?: `0x${string}` | undefined;

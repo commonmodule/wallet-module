@@ -1,17 +1,7 @@
 import { el } from "@common-module/app";
-import {
-  Button,
-  ButtonGroup,
-  ButtonType,
-  StructuredModal,
-} from "@common-module/app-components";
-import CoinbaseWalletConnector from "../wallet-connectors/CoinbaseWalletConnector.js";
-import MetaMaskConnector from "../wallet-connectors/MetaMaskConnector.js";
-import WalletConnectConnector from "../wallet-connectors/WalletConnectConnector.js";
+import { Button, StructuredModal } from "@common-module/app-components";
 import WalletConnector from "../wallet-connectors/WalletConnector.js";
-import CoinbaseWalletIcon from "./wallet-icons/CoinbaseWalletLogo.js";
-import MetaMaskIcon from "./wallet-icons/MetaMaskIcon.js";
-import WalletConnectIcon from "./wallet-icons/WalletConnectIcon.js";
+import WalletButtonGroup from "./WalletButtonGrouop.js";
 
 interface ConnectionResult {
   walletId: string;
@@ -27,25 +17,9 @@ export default class WalletConnectionModal extends StructuredModal {
 
     this.appendToHeader(el("h1", "Connect Your Crypto Wallet"));
     this.appendToMain(
-      new ButtonGroup(
-        new Button({
-          type: ButtonType.Outlined,
-          icon: new MetaMaskIcon(),
-          title: "Connect with MetaMask",
-          onClick: () => this.handleConnect(MetaMaskConnector),
-        }),
-        new Button({
-          type: ButtonType.Outlined,
-          icon: new CoinbaseWalletIcon(),
-          title: "Connect with Coinbase Wallet",
-          onClick: () => this.handleConnect(CoinbaseWalletConnector),
-        }),
-        new Button({
-          type: ButtonType.Outlined,
-          icon: new WalletConnectIcon(),
-          title: "Connect with WalletConnect",
-          onClick: () => this.handleConnect(WalletConnectConnector),
-        }),
+      new WalletButtonGroup(
+        "Connect",
+        (walletConnector) => this.handleConnect(walletConnector),
       ),
     );
     this.appendToFooter(
