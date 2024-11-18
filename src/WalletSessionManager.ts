@@ -1,5 +1,9 @@
 import { Store } from "@common-module/app";
-import { ConfirmDialog, ErrorDialog } from "@common-module/app-components";
+import {
+  AppCompConfig,
+  ConfirmDialog,
+  ErrorDialog,
+} from "@common-module/app-components";
 import { EventContainer } from "@common-module/ts";
 import {
   Config,
@@ -143,6 +147,7 @@ class WalletSessionManager extends EventContainer<{
 
   private showConnectWalletDialog() {
     new ConfirmDialog(".connect-wallet", {
+      icon: new AppCompConfig.WarningIcon(),
       title: "Connect Wallet",
       message:
         "You need to connect your wallet to execute this transaction. Would you like to connect your wallet now?",
@@ -158,6 +163,7 @@ class WalletSessionManager extends EventContainer<{
     const requiredWalletAddress = this.getConnectedAddress();
 
     new ConfirmDialog(".wallet-mismatch", {
+      icon: new AppCompConfig.WarningIcon(),
       title: "Wallet Address Mismatch",
       message:
         `Your current wallet address (${currentWalletAddress}) differs from the connected wallet address (${requiredWalletAddress}). Would you like to reconnect your wallet with the correct address?`,
@@ -178,6 +184,7 @@ class WalletSessionManager extends EventContainer<{
     const targetChainName = getChainById(targetChainId)?.name ?? "Unknown";
 
     new ConfirmDialog(".switch-network", {
+      icon: new AppCompConfig.WarningIcon(),
       title: "Switch Network",
       message:
         `You are currently connected to ${currentChainName}. Unable to execute transaction on ${targetChainName}. Would you like to switch to ${targetChainName}?`,

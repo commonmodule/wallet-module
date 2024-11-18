@@ -28,7 +28,7 @@ export default class NetworkMismatchModal extends StructuredModal {
     super(".network-mismatch-modal");
 
     this.appendToHeader(
-      el("h1", "Network Mismatch Detected"),
+      el("h1", new AppCompConfig.WarningIcon(), "Network Mismatch Detected"),
     );
 
     this.appendToMain(
