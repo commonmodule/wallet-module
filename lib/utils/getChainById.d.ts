@@ -8746,6 +8746,40 @@ export default function getChainById(chainId: number): {
 } | {
     blockExplorers: {
         readonly default: {
+            readonly name: "EnergyWeb Explorer";
+            readonly url: "https://explorer.energyweb.org";
+        };
+    };
+    contracts?: {
+        [x: string]: import("viem").ChainContract | {
+            [sourceId: number]: import("viem").ChainContract | undefined;
+        } | undefined;
+        ensRegistry?: import("viem").ChainContract | undefined;
+        ensUniversalResolver?: import("viem").ChainContract | undefined;
+        multicall3?: import("viem").ChainContract | undefined;
+        universalSignatureVerifier?: import("viem").ChainContract | undefined;
+    } | undefined;
+    id: 246;
+    name: "Energy Mainnet";
+    nativeCurrency: {
+        readonly name: "EWT";
+        readonly symbol: "EWT";
+        readonly decimals: 18;
+    };
+    rpcUrls: {
+        readonly default: {
+            readonly http: readonly ["https://rpc.energyweb.org"];
+        };
+    };
+    sourceId?: number | undefined;
+    testnet: false;
+    custom?: Record<string, unknown> | undefined;
+    fees?: import("viem").ChainFees<undefined> | undefined;
+    formatters?: undefined;
+    serializers?: import("viem").ChainSerializers<undefined, import("viem").TransactionSerializable<bigint, number>> | undefined;
+} | {
+    blockExplorers: {
+        readonly default: {
             readonly name: "ENULS Explorer";
             readonly url: "https://evmscan.nuls.io";
         };
@@ -14725,6 +14759,41 @@ export default function getChainById(chainId: number): {
     };
     sourceId?: number | undefined;
     testnet: true;
+    custom?: Record<string, unknown> | undefined;
+    fees?: import("viem").ChainFees<undefined> | undefined;
+    formatters?: undefined;
+    serializers?: import("viem").ChainSerializers<undefined, import("viem").TransactionSerializable<bigint, number>> | undefined;
+} | {
+    blockExplorers: {
+        readonly default: {
+            readonly name: "MCH Verse Explorer";
+            readonly url: "https://explorer.oasys.mycryptoheroes.net";
+            readonly apiUrl: "https://explorer.oasys.mycryptoheroes.net/api";
+        };
+    };
+    contracts?: {
+        [x: string]: import("viem").ChainContract | {
+            [sourceId: number]: import("viem").ChainContract | undefined;
+        } | undefined;
+        ensRegistry?: import("viem").ChainContract | undefined;
+        ensUniversalResolver?: import("viem").ChainContract | undefined;
+        multicall3?: import("viem").ChainContract | undefined;
+        universalSignatureVerifier?: import("viem").ChainContract | undefined;
+    } | undefined;
+    id: 29548;
+    name: "MCH Verse";
+    nativeCurrency: {
+        readonly name: "Oasys";
+        readonly symbol: "OAS";
+        readonly decimals: 18;
+    };
+    rpcUrls: {
+        readonly default: {
+            readonly http: readonly ["https://rpc.oasys.mycryptoheroes.net"];
+        };
+    };
+    sourceId?: number | undefined;
+    testnet: false;
     custom?: Record<string, unknown> | undefined;
     fees?: import("viem").ChainFees<undefined> | undefined;
     formatters?: undefined;
@@ -25778,6 +25847,40 @@ export default function getChainById(chainId: number): {
     };
     sourceId?: number | undefined;
     testnet: true;
+    custom?: Record<string, unknown> | undefined;
+    fees?: import("viem").ChainFees<undefined> | undefined;
+    formatters?: undefined;
+    serializers?: import("viem").ChainSerializers<undefined, import("viem").TransactionSerializable<bigint, number>> | undefined;
+} | {
+    blockExplorers: {
+        readonly default: {
+            readonly name: "Vanar Mainnet Explorer";
+            readonly url: "https://explorer.vanarchain.com/";
+        };
+    };
+    contracts?: {
+        [x: string]: import("viem").ChainContract | {
+            [sourceId: number]: import("viem").ChainContract | undefined;
+        } | undefined;
+        ensRegistry?: import("viem").ChainContract | undefined;
+        ensUniversalResolver?: import("viem").ChainContract | undefined;
+        multicall3?: import("viem").ChainContract | undefined;
+        universalSignatureVerifier?: import("viem").ChainContract | undefined;
+    } | undefined;
+    id: 2040;
+    name: "Vanar Mainnet";
+    nativeCurrency: {
+        readonly name: "VANRY";
+        readonly symbol: "VANRY";
+        readonly decimals: 18;
+    };
+    rpcUrls: {
+        readonly default: {
+            readonly http: readonly ["https://rpc.vanarchain.com"];
+        };
+    };
+    sourceId?: number | undefined;
+    testnet: false;
     custom?: Record<string, unknown> | undefined;
     fees?: import("viem").ChainFees<undefined> | undefined;
     formatters?: undefined;
