@@ -6,6 +6,7 @@ import {
   ErrorDialog,
 } from "@common-module/app-components";
 import { EventContainer } from "@common-module/ts";
+import { getChainById } from "@common-module/wallet-utils";
 import {
   Config,
   ReadContractParameters,
@@ -19,7 +20,6 @@ import {
 } from "viem";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
-import getChainById from "./utils/getChainById.js";
 
 class WalletSessionManager extends EventContainer<{
   sessionChanged: (connected: boolean) => void;

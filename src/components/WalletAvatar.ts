@@ -46,7 +46,7 @@ function generateColors(name: string, colors: string[]) {
 }
 
 export default class WalletAvatar extends DomNode {
-  constructor(walletAddress: string, options: { size: number }) {
+  constructor(walletAddress: string) {
     super(".wallet-avatar");
 
     walletAddress = getAddress(walletAddress);
@@ -62,7 +62,7 @@ export default class WalletAvatar extends DomNode {
     const maskId = `mask_${hashCode(walletAddress)}`;
 
     this.htmlElement.innerHTML =
-      `<svg viewBox="0 0 ${SIZE} ${SIZE}" fill="none" role="img" xmlns="http://www.w3.org/2000/svg" width="${options.size}" height="${options.size}">
+      `<svg viewBox="0 0 ${SIZE} ${SIZE}" fill="none" role="img" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <mask id="${maskId}" maskUnits="userSpaceOnUse" x="0" y="0" width="${SIZE}" height="${SIZE}">
     <rect width="${SIZE}" height="${SIZE}" fill="#FFFFFF" rx="${
         SIZE * 2

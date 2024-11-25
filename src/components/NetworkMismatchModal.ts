@@ -6,8 +6,8 @@ import {
   StructuredModal,
   WarningAlert,
 } from "@common-module/app-components";
+import { getChainById } from "@common-module/wallet-utils";
 import UniversalWalletConnector from "../UniversalWalletConnector.js";
-import getChainById from "../utils/getChainById.js";
 
 interface NetworkMismatchModalOptions {
   currentChainId?: number;
