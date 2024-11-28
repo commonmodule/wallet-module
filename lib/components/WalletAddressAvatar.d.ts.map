@@ -1,0 +1,1 @@
+{"version":3,"file":"WalletAddressAvatar.d.ts","sourceRoot":"","sources":["../../src/components/WalletAddressAvatar.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,+BAA+B,CAAC;AAG9D,MAAM,CAAC,OAAO,OAAO,mBAAoB,SAAQ,aAAa;gBAChD,aAAa,EAAE,MAAM;CAGlC"}
