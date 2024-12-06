@@ -1,1 +1,0 @@
-{"version":3,"file":"WalletConnectionManager.d.ts","sourceRoot":"","sources":["../src/WalletConnectionManager.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,KAAK,EAAE,MAAM,oBAAoB,CAAC;AAI3C,OAAO,eAAe,MAAM,wCAAwC,CAAC;AAErE,cAAM,uBAAuB;IACpB,UAAU,EAAE;QAAE,CAAC,QAAQ,EAAE,MAAM,GAAG,eAAe,CAAA;KAAE,CAIxD;IAEK,IAAI,CAAC,MAAM,EAAE,CAAC,KAAK,EAAE,GAAG,KAAK,EAAE,CAAC;CAUxC;;AAED,wBAA6C"}

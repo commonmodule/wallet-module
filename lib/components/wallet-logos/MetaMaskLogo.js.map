@@ -1,1 +1,0 @@
-{"version":3,"file":"MetaMaskLogo.js","sourceRoot":"","sources":["../../../src/components/wallet-logos/MetaMaskLogo.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,oBAAoB,CAAC;AAG7C,MAAM,CAAC,OAAO,OAAO,YAAa,SAAQ,OAAO;IAC/C;QACE,KAAK,CAAC,qBAAqB,CAAC,CAAC;QAC7B,IAAI,CAAC,WAAW,CAAC,SAAS;YACxB;;;;;;;;;;;;;;OAcC,CAAC;IACN,CAAC;CACF"}

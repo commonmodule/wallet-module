@@ -10,13 +10,14 @@ import { getChainById } from "@common-module/wallet-utils";
 import {
   Config,
   ReadContractParameters,
-  WriteContractParameters,
+  WriteContractParameters
 } from "@wagmi/core";
 import {
   type Abi,
   type ContractFunctionArgs,
   ContractFunctionExecutionError,
   type ContractFunctionName,
+  DecodeEventLogReturnType,
 } from "viem";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
@@ -97,7 +98,7 @@ class WalletSessionManager extends EventContainer<{
       Config,
       chainId
     >,
-  ) {
+  ): Promise<DecodeEventLogReturnType[]> {
     if (!this.getConnectedAddress() || !UniversalWalletConnector.getAddress()) {
       this.showConnectWalletDialog();
       throw new Error("Not connected");

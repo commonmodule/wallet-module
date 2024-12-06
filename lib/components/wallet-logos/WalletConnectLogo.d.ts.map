@@ -1,1 +1,0 @@
-{"version":3,"file":"WalletConnectLogo.d.ts","sourceRoot":"","sources":["../../../src/components/wallet-logos/WalletConnectLogo.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,oBAAoB,CAAC;AAC7C,OAAO,EAAE,WAAW,EAAE,MAAM,+BAA+B,CAAC;AAE5D,MAAM,CAAC,OAAO,OAAO,iBAAkB,SAAQ,OAAO;gBACxC,QAAQ,EAAE,WAAW;CASlC"}

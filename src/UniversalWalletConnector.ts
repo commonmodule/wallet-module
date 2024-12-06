@@ -21,6 +21,8 @@ import {
   type Abi,
   type ContractFunctionArgs,
   type ContractFunctionName,
+  decodeEventLog,
+  DecodeEventLogReturnType,
   hexToNumber,
 } from "viem";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
@@ -164,10 +166,23 @@ class UniversalWalletConnector {
       Config,
       chainId
     >,
-  ) {
+  ): Promise<DecodeEventLogReturnType[]> {
     const hash = await writeContract(this.config, parameters);
     const receipt = await waitForTransactionReceipt(this.config, { hash });
-    console.log(receipt);
+
+    const decodedEvents = receipt.logs.map((log) => {
+      try {
+        return decodeEventLog({
+          abi: parameters.abi,
+          data: log.data,
+          topics: log.topics,
+        });
+      } catch (error) {
+        return null;
+      }
+    }).filter(Boolean);
+
+    return decodedEvents as DecodeEventLogReturnType[];
   }
 }
 
