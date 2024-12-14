@@ -5,7 +5,7 @@ import WalletButtonGroup from "./WalletButtonGrouop.js";
 
 interface ConnectionResult {
   walletId: string;
-  walletAddress: string;
+  walletAddress: `0x${string}`;
 }
 
 export default class WalletConnectionModal extends StructuredModal {

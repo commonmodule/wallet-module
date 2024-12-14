@@ -10,7 +10,7 @@ import { getChainById } from "@common-module/wallet-utils";
 import {
   Config,
   ReadContractParameters,
-  WriteContractParameters
+  WriteContractParameters,
 } from "@wagmi/core";
 import {
   type Abi,
@@ -20,7 +20,9 @@ import {
   DecodeEventLogReturnType,
 } from "viem";
 import WalletConnectionModal from "./components/WalletConnectionModal.js";
+import InsufficientBalanceError from "./errors/InsufficientBalanceError.js";
 import UniversalWalletConnector from "./UniversalWalletConnector.js";
+import WalletModuleConfig from "./WalletModuleConfig.js";
 
 class WalletSessionManager extends EventContainer<{
   sessionChanged: (connected: boolean) => void;
@@ -41,19 +43,24 @@ class WalletSessionManager extends EventContainer<{
     UniversalWalletConnector.init(this.getConnectedWallet());
   }
 
-  public async connect() {
-    this.disconnect();
-
-    const result = await new WalletConnectionModal().waitForLogin();
-
+  public setConnectedWalletInfo(
+    walletId: string,
+    walletAddress: `0x${string}`,
+  ) {
     const currentIsConnected = this.isConnected();
 
-    this.store.setPermanent("connectedWallet", result.walletId);
-    this.store.setPermanent("connectedAddress", result.walletAddress);
+    this.store.setPermanent("connectedWallet", walletId);
+    this.store.setPermanent("connectedAddress", walletAddress);
 
     if (currentIsConnected !== this.isConnected()) {
       this.emit("sessionChanged", this.isConnected());
     }
+  }
+
+  public async connect() {
+    this.disconnect();
+    const result = await new WalletConnectionModal().waitForLogin();
+    this.setConnectedWalletInfo(result.walletId, result.walletAddress);
   }
 
   public disconnect() {
@@ -130,7 +137,29 @@ class WalletSessionManager extends EventContainer<{
       parameters.account = this.getConnectedAddress() as any;
       return await UniversalWalletConnector.writeContract(parameters);
     } catch (error: any) {
-      if (error instanceof ContractFunctionExecutionError) {
+      if (error instanceof InsufficientBalanceError) {
+        const chain = WalletModuleConfig.chains.find((c) =>
+          c.id === parameters.chainId
+        );
+        if (chain?.faucetUrl) {
+          const symbol = chain.nativeCurrency.symbol;
+
+          new ConfirmDialog(".insufficient-balance", {
+            icon: new AppCompConfig.WarningIcon(),
+            title: "Insufficient Balance",
+            message:
+              `You do not have enough balance to execute this transaction. Would you like to get some ${symbol} from the faucet?`,
+            confirmButtonTitle: `Get ${symbol}`,
+            onConfirm: () => window.open(chain.faucetUrl, "_blank"),
+          });
+        } else {
+          new ErrorDialog({
+            title: "Insufficient Balance",
+            message:
+              "You do not have enough balance to execute this transaction.",
+          });
+        }
+      } else if (error instanceof ContractFunctionExecutionError) {
         const match = error.message.match(
           /The current chain of the wallet \(id: (\d+)\) does not match the target chain for the transaction \(id: (\d+)/,
         );

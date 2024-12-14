@@ -9,6 +9,7 @@ declare class WalletSessionManager extends EventContainer<{
     getConnectedAddress(): `0x${string}` | undefined;
     isConnected(): boolean;
     init(): void;
+    setConnectedWalletInfo(walletId: string, walletAddress: `0x${string}`): void;
     connect(): Promise<void>;
     disconnect(): void;
     getBalance(chainId: number, walletAddress: `0x${string}`): Promise<bigint>;

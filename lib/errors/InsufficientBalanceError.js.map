@@ -1,0 +1,1 @@
+{"version":3,"file":"InsufficientBalanceError.js","sourceRoot":"","sources":["../../src/errors/InsufficientBalanceError.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,wBAAyB,SAAQ,KAAK;IACzD;QACE,KAAK,CAAC,sBAAsB,CAAC,CAAC;IAChC,CAAC;CACF"}

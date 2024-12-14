@@ -1,7 +1,7 @@
 import { StructuredModal } from "@common-module/app-components";
 interface ConnectionResult {
     walletId: string;
-    walletAddress: string;
+    walletAddress: `0x${string}`;
 }
 export default class WalletConnectionModal extends StructuredModal {
     private resolveConnection?;

@@ -1,4 +1,8 @@
-import { Chain, mainnet } from "@wagmi/core/chains";
+import { Chain as WagmiChain, mainnet } from "@wagmi/core/chains";
+
+interface Chain extends WagmiChain {
+  faucetUrl?: string;
+}
 
 export interface IWalletModuleConfig {
   chains: [Chain, ...Chain[]];

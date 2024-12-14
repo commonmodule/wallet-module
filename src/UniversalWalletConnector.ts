@@ -25,6 +25,7 @@ import {
   DecodeEventLogReturnType,
   hexToNumber,
 } from "viem";
+import InsufficientBalanceError from "./errors/InsufficientBalanceError.js";
 import CoinbaseWalletConnector from "./wallet-connectors/CoinbaseWalletConnector.js";
 import InjectedWalletConnector, {
   InjectedWalletInfo,
@@ -136,7 +137,10 @@ class UniversalWalletConnector {
     return getAccount(this.config).address;
   }
 
-  public async getBalance(chainId: number, walletAddress: `0x${string}`) {
+  public async getBalance(
+    chainId: number | undefined,
+    walletAddress: `0x${string}`,
+  ) {
     return (await getBalance(this.config, { chainId, address: walletAddress }))
       .value;
   }
@@ -167,6 +171,19 @@ class UniversalWalletConnector {
       chainId
     >,
   ): Promise<DecodeEventLogReturnType[]> {
+    if (parameters.value) {
+      const walletAddress = this.getAddress();
+      if (walletAddress) {
+        const balance = await this.getBalance(
+          parameters.chainId,
+          walletAddress,
+        );
+        if (balance < parameters.value) {
+          throw new InsufficientBalanceError();
+        }
+      }
+    }
+
     const hash = await writeContract(this.config, parameters);
     const receipt = await waitForTransactionReceipt(this.config, { hash });
 
