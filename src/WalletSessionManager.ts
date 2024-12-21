@@ -9,6 +9,7 @@ import { EventContainer } from "@common-module/ts";
 import { getChainById } from "@common-module/wallet-utils";
 import {
   Config,
+  EstimateGasParameters,
   ReadContractParameters,
   WriteContractParameters,
 } from "@wagmi/core";
@@ -86,6 +87,12 @@ class WalletSessionManager extends EventContainer<{
     args extends ContractFunctionArgs<abi, "pure" | "view", functionName>,
   >(parameters: ReadContractParameters<abi, functionName, args, Config>) {
     return await UniversalWalletConnector.readContract(parameters);
+  }
+
+  public async estimateGas<chainId extends Config["chains"][number]["id"]>(
+    parameters: EstimateGasParameters<Config, chainId>,
+  ) {
+    return await UniversalWalletConnector.estimateGas(parameters);
   }
 
   public async writeContract<

@@ -4,6 +4,8 @@ import {
   Config,
   createConfig,
   disconnect,
+  estimateGas,
+  EstimateGasParameters,
   getAccount,
   getBalance,
   getChainId,
@@ -151,6 +153,12 @@ class UniversalWalletConnector {
     args extends ContractFunctionArgs<abi, "pure" | "view", functionName>,
   >(parameters: ReadContractParameters<abi, functionName, args, Config>) {
     return await readContract(this.config, parameters);
+  }
+
+  public async estimateGas<chainId extends Config["chains"][number]["id"]>(
+    parameters: EstimateGasParameters<Config, chainId>,
+  ) {
+    return await estimateGas(this.config, parameters);
   }
 
   public async writeContract<
