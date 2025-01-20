@@ -1,4 +1,5 @@
 import { Chain as WagmiChain, mainnet } from "@wagmi/core/chains";
+import WalletSessionManager from "./WalletSessionManager.js";
 
 interface Chain extends WagmiChain {
   faucetUrl?: string;
@@ -26,6 +27,8 @@ class WalletModuleConfig implements IWalletModuleConfig {
   public init(options: IWalletModuleConfig) {
     this.chains = options.chains;
     this.walletConnectProjectId = options.walletConnectProjectId;
+
+    WalletSessionManager.init();
   }
 }
 
