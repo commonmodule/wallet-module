@@ -1,6 +1,6 @@
 import { coinbaseWallet } from "@wagmi/connectors";
 import { Config } from "@wagmi/core";
-import CoinbaseWalletIcon from "../components/wallet-icons/CoinbaseWalletLogo.js";
+import CoinbaseWalletIcon from "../components/wallet-icons/CoinbaseWalletIcon.js";
 import WalletConnector from "./WalletConnector.js";
 
 class CoinbaseWalletConnector extends WalletConnector {
