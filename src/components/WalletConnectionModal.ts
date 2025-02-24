@@ -1,7 +1,7 @@
 import { el } from "@common-module/app";
 import { Button, StructuredModal } from "@common-module/app-components";
 import WalletConnector from "../wallet-connectors/WalletConnector.js";
-import WalletButtonGroup from "./WalletButtonGrouop.js";
+import WalletButtonGroup from "./WalletButtonGroup.js";
 
 interface ConnectionResult {
   walletId: string;
