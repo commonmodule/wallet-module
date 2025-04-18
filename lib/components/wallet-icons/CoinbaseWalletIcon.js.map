@@ -1,0 +1,1 @@
+{"version":3,"file":"CoinbaseWalletIcon.js","sourceRoot":"","sources":["../../../src/components/wallet-icons/CoinbaseWalletIcon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,mBAAmB,CAAC;AAE5C,MAAM,CAAC,OAAO,OAAO,kBAAmB,SAAQ,OAAO;IACrD;QACE,KAAK,CAAC,uBAAuB,CAAC,CAAC;QAC/B,IAAI,CAAC,WAAW,CAAC,SAAS;YACxB;;;;;;;;;;;;OAYC,CAAC;IACN,CAAC;CACF"}
