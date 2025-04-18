@@ -1,12 +1,12 @@
-import { Store } from "@common-module/app";
+import { Store } from "@commonmodule/app";
 import {
   AlertDialog,
   AppCompConfig,
   ConfirmDialog,
   ErrorDialog,
-} from "@common-module/app-components";
-import { EventContainer } from "@common-module/ts";
-import { getChainById } from "@common-module/wallet-utils";
+} from "@commonmodule/app-components";
+import { EventContainer } from "@commonmodule/ts";
+import { getChainById } from "@commonmodule/wallet-utils";
 import {
   Config,
   EstimateGasParameters,

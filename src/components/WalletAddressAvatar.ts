@@ -1,4 +1,4 @@
-import { DefaultAvatar } from "@common-module/app-components";
+import { DefaultAvatar } from "@commonmodule/app-components";
 import { getAddress } from "viem";
 
 export default class WalletAddressAvatar extends DefaultAvatar {

@@ -1,5 +1,5 @@
-import { ConfirmDialog } from "@common-module/app-components";
-import { ArrayUtils } from "@common-module/ts";
+import { ConfirmDialog } from "@commonmodule/app-components";
+import { ArrayUtils } from "@commonmodule/ts";
 import {
   Config,
   createConfig,

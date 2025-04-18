@@ -1,12 +1,12 @@
-import { el } from "@common-module/app";
+import { el } from "@commonmodule/app";
 import {
   AppCompConfig,
   Button,
   ButtonType,
   StructuredModal,
   WarningAlert,
-} from "@common-module/app-components";
-import { getChainById } from "@common-module/wallet-utils";
+} from "@commonmodule/app-components";
+import { getChainById } from "@commonmodule/wallet-utils";
 import UniversalWalletConnector from "../UniversalWalletConnector.js";
 
 interface NetworkMismatchModalOptions {

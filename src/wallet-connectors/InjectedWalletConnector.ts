@@ -1,4 +1,4 @@
-import { DomNode, el } from "@common-module/app";
+import { DomNode, el } from "@commonmodule/app";
 import { injected } from "@wagmi/connectors";
 import { Config } from "@wagmi/core";
 import WalletConnector from "./WalletConnector.js";

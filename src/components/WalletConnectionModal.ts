@@ -1,5 +1,5 @@
-import { el } from "@common-module/app";
-import { Button, StructuredModal } from "@common-module/app-components";
+import { el } from "@commonmodule/app";
+import { Button, StructuredModal } from "@commonmodule/app-components";
 import WalletConnector from "../wallet-connectors/WalletConnector.js";
 import WalletButtonGroup from "./WalletButtonGroup.js";
 

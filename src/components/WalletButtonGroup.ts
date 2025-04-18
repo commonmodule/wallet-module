@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, ButtonType } from "@common-module/app-components";
+import { Button, ButtonGroup, ButtonType } from "@commonmodule/app-components";
 import UniversalWalletConnector from "../UniversalWalletConnector.js";
 import WalletConnector from "../wallet-connectors/WalletConnector.js";
 

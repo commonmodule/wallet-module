@@ -1,4 +1,4 @@
-import { DomNode } from "@common-module/app";
+import { DomNode } from "@commonmodule/app";
 
 export default class WalletConnectIcon extends DomNode {
   constructor() {
