@@ -1,6 +1,6 @@
-import { DomNode } from "@commonmodule/app";
+import { Dom } from "@commonmodule/app";
 
-export default class MetaMaskIcon extends DomNode {
+export default class MetaMaskIcon extends Dom {
   constructor() {
     super(".icon.metamask");
     this.htmlElement.innerHTML =

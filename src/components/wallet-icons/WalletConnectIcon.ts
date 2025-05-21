@@ -1,6 +1,6 @@
-import { DomNode } from "@commonmodule/app";
+import { Dom } from "@commonmodule/app";
 
-export default class WalletConnectIcon extends DomNode {
+export default class WalletConnectIcon extends Dom {
   constructor() {
     super(".icon.walletconnect");
     this.htmlElement.innerHTML =

@@ -1,6 +1,6 @@
-import { DomNode } from "@commonmodule/app";
+import { Dom } from "@commonmodule/app";
 
-export default class CoinbaseWalletIcon extends DomNode {
+export default class CoinbaseWalletIcon extends Dom {
   constructor() {
     super(".icon.coinbase-wallet");
     this.htmlElement.innerHTML =

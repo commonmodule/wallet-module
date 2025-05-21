@@ -1,4 +1,4 @@
-import { DomNode, el } from "@commonmodule/app";
+import { Dom, el } from "@commonmodule/app";
 import { injected } from "@wagmi/connectors";
 import { Config } from "@wagmi/core";
 import WalletConnector from "./WalletConnector.js";
@@ -13,7 +13,7 @@ export interface InjectedWalletInfo {
 export default class InjectedWalletConnector extends WalletConnector {
   public walletId: string;
   public walletName: string;
-  public walletIcon: DomNode;
+  public walletIcon: Dom;
 
   constructor(private walletInfo: InjectedWalletInfo, private provider: any) {
     super();

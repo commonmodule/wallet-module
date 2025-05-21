@@ -25,7 +25,7 @@ export default class WalletConnectionModal extends StructuredModal {
     this.appendToFooter(
       new Button(".cancel", {
         title: "Cancel",
-        onClick: () => this.remove(),
+        onPress: () => this.remove(),
       }),
     );
 

@@ -14,7 +14,7 @@ export default class WalletButtonGroup extends ButtonGroup {
           type: ButtonType.Outlined,
           icon: connector.walletIcon.clone(),
           title: `${buttonText} with ${connector.walletName}`,
-          onClick: () => onWalletSelect(connector),
+          onPress: () => onWalletSelect(connector),
         })
       ),
     );

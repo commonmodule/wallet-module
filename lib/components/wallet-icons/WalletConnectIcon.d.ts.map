@@ -1,1 +1,1 @@
-{"version":3,"file":"WalletConnectIcon.d.ts","sourceRoot":"","sources":["../../../src/components/wallet-icons/WalletConnectIcon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,mBAAmB,CAAC;AAE5C,MAAM,CAAC,OAAO,OAAO,iBAAkB,SAAQ,OAAO;;CAUrD"}
+{"version":3,"file":"WalletConnectIcon.d.ts","sourceRoot":"","sources":["../../../src/components/wallet-icons/WalletConnectIcon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,MAAM,CAAC,OAAO,OAAO,iBAAkB,SAAQ,GAAG;;CAUjD"}

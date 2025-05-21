@@ -44,13 +44,13 @@ export default class NetworkMismatchModal extends StructuredModal {
     this.appendToFooter(
       new Button(".cancel-transaction", {
         title: "Cancel Transaction",
-        onClick: () => this.remove(),
+        onPress: () => this.remove(),
       }),
       new Button(".proceed-current-network", {
         type: ButtonType.Contained,
         icon: new AppCompConfig.WarningIcon(),
         title: "Continue on Current Network",
-        onClick: () => {
+        onPress: () => {
           this.resolveProceed?.();
           this.rejectProceed = undefined;
           this.remove();
@@ -59,7 +59,7 @@ export default class NetworkMismatchModal extends StructuredModal {
       new Button(".switch-target-network", {
         type: ButtonType.Contained,
         title: `Switch to ${targetChainName}`,
-        onClick: () => {
+        onPress: () => {
           UniversalWalletConnector.switchChain(options.targetChainId);
           this.rejectProceed?.(new Error("Switching chain"));
           this.rejectProceed = undefined;

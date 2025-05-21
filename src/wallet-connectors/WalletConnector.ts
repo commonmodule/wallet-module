@@ -1,4 +1,4 @@
-import { DomNode } from "@commonmodule/app";
+import { Dom } from "@commonmodule/app";
 import {
   Config,
   connect,
@@ -10,7 +10,7 @@ import {
 export default abstract class WalletConnector {
   abstract walletId: string;
   abstract walletName: string;
-  abstract walletIcon: DomNode;
+  abstract walletIcon: Dom;
 
   private _config?: Config;
   protected get config() {
